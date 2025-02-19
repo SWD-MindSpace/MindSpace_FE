@@ -1,8 +1,17 @@
+'use client'
+
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@heroui/react'
 import React from 'react'
 import { FiChevronDown, FiFileText, FiGrid, FiUsers } from 'react-icons/fi'
+import { usePathname } from "next/navigation";
 
 export default function SideBar() {
+    const pathname = usePathname()
+
+    const isLoginPage = pathname === '/login'
+
+    if (isLoginPage) return
+
     return (
         <div className='flex h-screen'>
             <div className='w-64 bg-primary-blue text-white fixed h-full left-0 top-0'>

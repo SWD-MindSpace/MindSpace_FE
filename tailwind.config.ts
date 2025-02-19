@@ -7,6 +7,7 @@ export default {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
     "./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}",
+    "./src/features/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
@@ -21,6 +22,7 @@ export default {
       fontFamily: {
         'bevnpro': ['Be Vietnam Pro'], // Big headings
         'noto-sans': ['Noto Sans'], // Text
+        'league-spartan': ['League Spartan']
       },
       screens: {
         sm: "576px",    
