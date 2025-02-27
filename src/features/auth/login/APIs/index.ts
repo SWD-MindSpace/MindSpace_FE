@@ -18,14 +18,12 @@ export async function login({email, password}: LoginSchema) {
         const {id_token, access_token, refresh_token} = response.data
 
         // verify user's role
-        const decodedIdToken = Base64.decode(id_token)
+        const decodedIdToken = Base64.decode(id_token.split('.')[1])
 
-        const decodedIdTokenArr = decodedIdToken.replace(/"/g, '').split(",")
-        
-        const role = decodedIdTokenArr.find(item => (item.startsWith("role")))?.slice(5)
-
+        const {role} = JSON.parse(decodedIdToken)
+    
          // save token to local storage & return status
-        if (role === 'Admin' || role === 'Psychologist' || role === 'School Manager') {
+        if (role === 'Admin' || role === 'Psychologist' || role === 'SchoolManager') {
 
             localStorage.setItem('access_token', access_token)
             localStorage.setItem('refresh_token', refresh_token)

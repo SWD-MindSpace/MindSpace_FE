@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Providers from "@/components/provider/Providers";
 import SideBar from "@/components/SideBar";
-import AdminHeader from "@/components/AdminHeader";
+import Header from "@/components/Header";
 import { usePathname } from "next/navigation";
 
 
@@ -27,15 +27,17 @@ export default function RootLayout({
             <body>
                 <Providers>
                     {!isLogginPage ? (
-                        <div className="grid grid-cols-12 bg-gray-50">
+                        <div className="flex flex-row bg-gray-50">
 
-                            <div className="col-span-2">
+                            {/* Left section: Sidebar */}
+                            <div className="w-1/6 bg-white shadow-md border-r-1 z-50">
                                 <SideBar />
                             </div>
 
-                            <div className="col-span-10 flex flex-col">
-                                <AdminHeader />
-                                <div className="p-5">
+                            {/* Right section: Header & Main Content */}
+                            <div className="w-5/6 flex flex-col ">
+                                <Header />
+                                <div className="p-10 min-h-screen">
                                     {children}
                                 </div>
                             </div>

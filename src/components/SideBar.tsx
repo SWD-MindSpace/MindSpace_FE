@@ -1,9 +1,10 @@
 'use client'
 
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@heroui/react'
 import React from 'react'
-import { FiChevronDown, FiFileText, FiGrid, FiUsers } from 'react-icons/fi'
 import { usePathname } from "next/navigation";
+import AdminSidebar from './sidebar/AdminSidebar';
+import PsychologistSidebar from './sidebar/PsychologistSidebar';
+import SchoolManagerSidebar from './sidebar/SchoolManagerSidebar';
 
 export default function SideBar() {
     const pathname = usePathname()
@@ -12,54 +13,28 @@ export default function SideBar() {
 
     if (isLoginPage) return
 
-    return (
-        <div className='flex h-screen'>
-            <div className='w-64 bg-primary-blue text-white fixed h-full left-0 top-0'>
-                <div className='flex justify-center items-center py-6 border-b-2'>
-                    <h2 className='font-bold text-xl font-bevnpro'>Admin</h2>
-                </div>
+    const itemClasses = {
+        base: "py-0 w-full",
+        title: "font-normal text-sm px-2 data-[open=true]:text-primary-blue",
+        trigger: "px-2 py-0 data-[hover=true]:bg-gray-100 rounded-lg h-14 flex items-center data-[open=true]:bg-gray-100",
+        indicator: "text-medium",
+        content: "text-small px-3",
+    };
 
-                <nav className='mt-10'>
-                    <ul className='space-y-20'>
-                        <li className='flex items-center p-4 hover:bg-secondary-blue cursor-pointer'>
-                            <div className="flex items-center text-lg font-bevnpro font-bold">
-                                <FiGrid className="w-5 h-5" />
-                                <span className="ml-4">Dashboard</span>
-                            </div>
-                        </li>
-                        <Dropdown>
-                            <DropdownTrigger>
-                                <li className="flex justify-between items-center p-4 hover:bg-secondary-blue cursor-pointer">
-                                    <div className="flex items-center text-lg font-bevnpro font-bold">
-                                        <FiFileText className="w-5 h-5" />
-                                        <span className="ml-4">Manage Articles</span>
-                                    </div>
-                                    <FiChevronDown className="w-5 h-5" />
-                                </li>
-                            </DropdownTrigger>
-                            <DropdownMenu className="font-noto-sans uppercase">
-                                <DropdownItem key="view-resources">View All Articles/Blogs</DropdownItem>
-                                <DropdownItem key="create-resources">Create a new Article/Blog</DropdownItem>
-                            </DropdownMenu>
-                        </Dropdown>
-                        <Dropdown>
-                            <DropdownTrigger>
-                                <li className="flex justify-between items-center p-4 hover:bg-secondary-blue cursor-pointer">
-                                    <div className="flex items-center text-lg font-bevnpro font-bold">
-                                        <FiUsers className="w-5 h-5" />
-                                        <span className="ml-4">Manage Accounts</span>
-                                    </div>
-                                    <FiChevronDown className="w-5 h-5" />
-                                </li>
-                            </DropdownTrigger>
-                            <DropdownMenu className="font-noto-sans uppercase">
-                                <DropdownItem key="school-manager-account">School Manager Accounts</DropdownItem>
-                                <DropdownItem key="psychologist-account">Psychologists Accounts</DropdownItem>
-                                <DropdownItem key="create-account">Create a new account</DropdownItem>
-                            </DropdownMenu>
-                        </Dropdown>
-                    </ul>
-                </nav>
+    const mainLinkStyle = 'text-sm hover:bg-gray-100 rounded-lg h-14 flex items-center mx-2 px-4'
+
+    const subLinkStyle = 'hover:bg-default-100 hover:text-primary-blue px-3 py-2 rounded-lg flex items-center'
+
+    return (
+        <div className='sticky top-0 flex flex-col'>
+            <div className='flex items-center justify-center h-16 border-b-1 mx-5'>
+                <p className='text-xl bg-primary-blue font-semibold text-white px-6 py-2 rounded-full'>MindSpace</p>
+            </div>
+
+            <div className='py-4'>
+                <AdminSidebar itemClasses={itemClasses} subLinkStyle={subLinkStyle} mainLinkStyle={mainLinkStyle} />
+                <PsychologistSidebar itemClasses={itemClasses} subLinkStyle={subLinkStyle} mainLinkStyle={mainLinkStyle} />
+                <SchoolManagerSidebar itemClasses={itemClasses} subLinkStyle={subLinkStyle} mainLinkStyle={mainLinkStyle} />
             </div>
         </div>
     )
