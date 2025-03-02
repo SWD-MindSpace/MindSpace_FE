@@ -27,13 +27,13 @@ export default function SchoolManagerSidebar({ itemClasses, subLinkStyle, mainLi
                     <div className='flex flex-col'>
                         <Link href='/tests/create' className={subLinkStyle}>Tạo bài test mới</Link>
                         <Link href='/tests' className={subLinkStyle}>Xem tất cả bài test</Link>
-                        <Link href='/questions' className={subLinkStyle}>Xem tất cả câu hỏi</Link>
+                        {/* <Link href='/questions' className={subLinkStyle}>Xem tất cả câu hỏi</Link> */}
                     </div>
                 </AccordionItem>
                 <AccordionItem key="3" aria-label="Manage Supporting Programs" title="Quản lý chương trình hỗ trợ">
                     <div className='flex flex-col'>
                         <Link href='/' className={subLinkStyle}>Tạo chương trình mới</Link>
-                        <Link href='/' className={subLinkStyle}>Xem tất cả chương trình</Link>
+                        <Link href='/supporting-programs' className={subLinkStyle}>Xem tất cả chương trình</Link>
                     </div>
                 </AccordionItem>
             </Accordion>

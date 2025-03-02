@@ -1,21 +1,21 @@
 'use client'
 
 import React, { useCallback, useEffect, useState } from 'react'
-import { TEST_LIST_COLUMNS, TEST_CENTER_COLUMNS } from '../../features/tests/constants'
+import { BLOG_LIST_COLUMNS, BLOG_CENTER_COLUMNS } from '@/features/resources/blogs/constants'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useDebouncedCallback } from 'use-debounce';
 import { toast } from 'react-toastify'
 import { truncateText } from '@/lib/utils'
-import { TestTableData } from '@/features/tests/schemas/testTableDataSchema'
+import { BlogTableData } from '@/features/resources/blogs/schemas/blogTableDataSchema'
 
-import { getAllTests, TestQueryParams } from '@/features/tests/APIs'
+import { getAllBlogs, BlogQueryParams } from '@/features/resources/blogs/APIs'
 import ListActions from '@/components/list/ListActions'
 import ListLayout from '@/components/ListLayout'
 
 const LIMIT = 12
 
 export default function TestListPage() {
-    const [data, setData] = useState<TestTableData[] | null>(null)
+    const [data, setData] = useState<BlogTableData[] | null>(null)
     const [totalPages, setTotalPages] = useState<number | null>(null)
     const [totalItems, setTotalItems] = useState<number | null>(null)
 
@@ -25,7 +25,7 @@ export default function TestListPage() {
 
 
     const fetchData = async () => {
-        const result = await getAllTests(Object.fromEntries(searchParams) as TestQueryParams)
+        const result = await getAllBlogs(Object.fromEntries(searchParams) as BlogQueryParams)
 
         if (result.status === 'success') {
             const { data, count } = result.data
@@ -61,24 +61,24 @@ export default function TestListPage() {
     }, 300)
 
 
-    const renderCell = useCallback((testData: TestTableData, columnKey: React.Key) => {
-        const cellValue = testData[columnKey as keyof TestTableData]
+    const renderCell = useCallback((articleTableData: BlogTableData, columnKey: React.Key) => {
+        const cellValue = articleTableData[columnKey as keyof BlogTableData]
 
         switch (columnKey) {
             case "id":
                 return <div>{cellValue as number}</div>
             case "title":
                 return <div className='w-80 truncate'>{cellValue as string}</div>
-            case "testCode":
+            case "introduction":
+                return <div className='w-80 truncate'>{cellValue as string}</div>
+            case "resourceType":
                 return <div>{cellValue as string}</div>
-            case "targetUser":
-                return <div>{cellValue as string === 'Student' ? 'Học sinh' : 'Phụ huynh'}</div>
-            case "description":
-                return <div>{truncateText(cellValue as string)}</div>
-            case "questionCount":
-                return <div>{cellValue as number}</div>
-            case "price":
-                return <div>{cellValue as number}</div>
+            case "isActive":
+                return <div>{cellValue == true ? "Hiện" : "Ẩn"}</div>
+            case "specializationName":
+                return <div>{cellValue as string}</div>
+            case "schoolManagerName":
+                return <div>{cellValue as string}</div>
             case "actions":
                 return <ListActions />
         }
@@ -100,8 +100,8 @@ export default function TestListPage() {
             {data &&
                 <ListLayout
                     data={data}
-                    tableColumns={TEST_LIST_COLUMNS}
-                    tableCenterColumns={TEST_CENTER_COLUMNS}
+                    tableColumns={BLOG_LIST_COLUMNS}
+                    tableCenterColumns={BLOG_CENTER_COLUMNS}
                     searchParams={searchParams}
                     totalPages={totalPages as number | null}
                     createHref='/tests/create'

@@ -26,10 +26,16 @@ export default function AdminSidebar({ itemClasses, subLinkStyle, mainLinkStyle 
                         <Link href='/' className={subLinkStyle}>Quản lý trường học</Link>
                     </div>
                 </AccordionItem>
-                <AccordionItem key="2" aria-label="Manage Articles" title="Quản lý bài đăng">
+                <AccordionItem key="2" aria-label="Manage Articles" title="Quản lý bài báo">
+                    <div className='flex flex-col'>
+                        <Link href='/' className={subLinkStyle}>Tạo bài báo mới</Link>
+                        <Link href='/resources/articles' className={subLinkStyle}>Xem tất cả bài báo</Link>
+                    </div>
+                </AccordionItem>
+                <AccordionItem key="3" aria-label="Manage Blogs" title="Quản lý bài blog">
                     <div className='flex flex-col'>
                         <Link href='/' className={subLinkStyle}>Tạo bài đăng mới</Link>
-                        <Link href='/' className={subLinkStyle}>Xem tất cả bài đăng</Link>
+                        <Link href='/resources/blogs' className={subLinkStyle}>Xem tất cả bài blog</Link>
                     </div>
                 </AccordionItem>
             </Accordion>
