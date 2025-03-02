@@ -15,7 +15,7 @@ import ListLayout from '@/components/ListLayout'
 
 const LIMIT = 12
 
-export default function TestListPage() {
+export default function SupportingProgramListPage() {
     const [data, setData] = useState<SupportingProgramTableData[] | null>(null)
     const [totalPages, setTotalPages] = useState<number | null>(null)
     const [totalItems, setTotalItems] = useState<number | null>(null)
@@ -112,7 +112,7 @@ export default function TestListPage() {
                     tableCenterColumns={SUPPORTING_PROGRAM_CENTER_COLUMNS}
                     searchParams={searchParams}
                     totalPages={totalPages as number | null}
-                    createHref='/tests/create'
+                    createHref='/supporting-programs/create'
                     searchBoxProps={searchBoxProps}
                     totalItems={totalItems}
                     renderCell={renderCell}
