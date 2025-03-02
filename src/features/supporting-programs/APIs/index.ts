@@ -1,23 +1,24 @@
 // Create functions to call APIs from BE
 import axios from 'axios';
 
-const baseUrlTest = 'https://localhost:7096/api/v1/tests'
-const baseUrlQuestion = 'https://localhost:7096/api/v1/questions'
+const baseUrlSupportingPrograms = 'https://localhost:7096/api/v1/supporting-programs'
 
-export type TestQueryParams = {
-    Title?: string,
-    TestCode?: string,
-    TargetUser?: string,
-    MinPrice?: number,
-    MaxPrice?: number,
-    TestCategoryId?: number,
-    SpecializationId?: number,
+export type SupportingProgramQueryParams = {
+    MinQuantity?: number,
+    MaxQuantity?: number,
+    SearchTitle?: string,
+    StartDateAt?: string,
+    SchoolManagerId?: string,
+    PsychologistId?: string,
+    SchoolId?: string,
+    FromDate?: string,
+    ToDate?: string,
     Sort?: string,
     PageIndex?: number,
     PageSize?: number
 }
 
-export const getAllTests = async (searchParams: TestQueryParams) => {
+export const getAllSupportingPrograms = async (searchParams: SupportingProgramQueryParams) => {
 
     // append PageSize to params obj
     searchParams = {
@@ -35,15 +36,15 @@ export const getAllTests = async (searchParams: TestQueryParams) => {
         }, {} as Record<string, string>)
     ).toString()
 
-    const url = queryString ? `${baseUrlTest}?${queryString}` : `${baseUrlTest}`
+    const url = queryString ? `${baseUrlSupportingPrograms}?${queryString}` : `${baseUrlSupportingPrograms}`
 
     try {
         // call API
         const response = await axios.get(url)
 
-        const testData = response?.data
+        const supportingProgramData = response?.data
 
-        return { status: 'success', data: testData }
+        return { status: 'success', data: supportingProgramData }
 
     } catch (error) {
         console.log(error)

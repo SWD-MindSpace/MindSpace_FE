@@ -1,23 +1,19 @@
 // Create functions to call APIs from BE
 import axios from 'axios';
 
-const baseUrlTest = 'https://localhost:7096/api/v1/tests'
-const baseUrlQuestion = 'https://localhost:7096/api/v1/questions'
+const baseUrlArticle = 'https://localhost:7096/api/v1/resources/articles'
 
-export type TestQueryParams = {
-    Title?: string,
-    TestCode?: string,
-    TargetUser?: string,
-    MinPrice?: number,
-    MaxPrice?: number,
-    TestCategoryId?: number,
+export type ArticleQueryParams = {
+    Type?: string,
+    IsActive?: boolean,
+    SchoolManagerId?: string,
     SpecializationId?: number,
-    Sort?: string,
+    SearchTitle?: number,
     PageIndex?: number,
     PageSize?: number
 }
 
-export const getAllTests = async (searchParams: TestQueryParams) => {
+export const getAllArticles = async (searchParams: ArticleQueryParams) => {
 
     // append PageSize to params obj
     searchParams = {
@@ -35,15 +31,15 @@ export const getAllTests = async (searchParams: TestQueryParams) => {
         }, {} as Record<string, string>)
     ).toString()
 
-    const url = queryString ? `${baseUrlTest}?${queryString}` : `${baseUrlTest}`
+    const url = queryString ? `${baseUrlArticle}?${queryString}` : `${baseUrlArticle}`
 
     try {
         // call API
         const response = await axios.get(url)
 
-        const testData = response?.data
+        const articleData = response?.data
 
-        return { status: 'success', data: testData }
+        return { status: 'success', data: articleData }
 
     } catch (error) {
         console.log(error)
