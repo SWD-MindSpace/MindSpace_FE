@@ -86,7 +86,7 @@ export default function BlogListPage() {
 
     const searchBoxProps = {
         placeholder: 'Tìm kiếm tiêu đề',
-        searchField: 'Title'
+        searchField: 'SearchTitle'
     }
 
     useEffect(() => {

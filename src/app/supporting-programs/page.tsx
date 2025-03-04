@@ -26,6 +26,7 @@ export default function SupportingProgramListPage() {
 
 
     const fetchData = async () => {
+        console.log('searchParams', searchParams)
         const result = await getAllSupportingPrograms(Object.fromEntries(searchParams) as SupportingProgramQueryParams)
 
         if (result.status === 'success') {
@@ -94,7 +95,7 @@ export default function SupportingProgramListPage() {
 
     const searchBoxProps = {
         placeholder: 'Tìm kiếm tiêu đề',
-        searchField: 'Title'
+        searchField: 'SearchTitle'
     }
 
     useEffect(() => {
