@@ -88,7 +88,7 @@ export default function ArticleListPage() {
 
     const searchBoxProps = {
         placeholder: 'Tìm kiếm tiêu đề',
-        searchField: 'Title'
+        searchField: 'SearchTitle'
     }
 
     useEffect(() => {
