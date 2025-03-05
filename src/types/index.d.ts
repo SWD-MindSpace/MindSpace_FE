@@ -1,4 +1,5 @@
 // Define customized types
+import { AccountTable } from "@/features/accounts/common/schemas/AccountTableSchema";
 import { QuestionTableData } from "@/features/questions/schemas";
 import { ArticleTableData } from "@/features/resources/articles/schemas/articleTableDataSchema";
 import { BlogTableData } from "@/features/resources/blogs/schemas/blogTableDataSchema";
@@ -13,4 +14,4 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
 export type ActionResult<T> =
     { status: 'success', data: T } | { status: 'error', error: string | ZodIssue[] }
 
-export type TableData = TestTableData | QuestionTableData | ArticleTableData | SupportingProgramTableData | BlogTableData
+export type TableData = TestTableData | QuestionTableData | ArticleTableData | SupportingProgramTableData | BlogTableData | AccountTableData

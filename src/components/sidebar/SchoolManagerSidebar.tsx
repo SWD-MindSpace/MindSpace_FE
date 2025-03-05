@@ -19,8 +19,7 @@ export default function SchoolManagerSidebar({ itemClasses, subLinkStyle, mainLi
                 <AccordionItem key="1" aria-label="Manage Accounts" title="Quản lý tài khoản">
                     <div className='flex flex-col'>
                         <Link href='/' className={subLinkStyle}>Tạo tài khoản mới</Link>
-                        <Link href='/' className={subLinkStyle}>Học sinh</Link>
-                        <Link href='/' className={subLinkStyle}>Phụ huynh</Link>
+                        <Link href='/accounts/students' className={subLinkStyle}>Học sinh</Link>
                     </div>
                 </AccordionItem>
                 <AccordionItem key="2" aria-label="Manage Psychological Tests" title="Quản lý bài test">
