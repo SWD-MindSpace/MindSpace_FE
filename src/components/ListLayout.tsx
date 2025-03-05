@@ -33,11 +33,13 @@ export default function ListLayout({ data, tableColumns, tableCenterColumns, tot
             <div className='flex flex-row justify-between'>
 
                 {/* Search, Filter, Sort */}
-                <SearchBox
-                    searchParams={searchParams}
-                    onInputChange={onInputChange}
-                    searchBoxProps={searchBoxProps}
-                />
+                <div className='w-[40%] mb-10'>
+                    <SearchBox
+                        searchParams={searchParams}
+                        onInputChange={onInputChange}
+                        searchBoxProps={searchBoxProps}
+                    />
+                </div>
 
                 <Button
                     className='bg-black text-white'

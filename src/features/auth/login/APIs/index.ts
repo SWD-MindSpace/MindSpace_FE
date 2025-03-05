@@ -20,11 +20,17 @@ export async function login({email, password}: LoginSchema) {
         // verify user's role
         const decodedIdToken = Base64.decode(id_token.split('.')[1])
 
-        const {role} = JSON.parse(decodedIdToken)
+        const {role, sub} = JSON.parse(decodedIdToken)
     
          // save token to local storage & return status
         if (role === 'Admin' || role === 'Psychologist' || role === 'SchoolManager') {
 
+            const userInfo = {
+                role,
+                userId: sub
+            }
+
+            localStorage.setItem('userInfo', JSON.stringify(userInfo))
             localStorage.setItem('access_token', access_token)
             localStorage.setItem('refresh_token', refresh_token)
 
