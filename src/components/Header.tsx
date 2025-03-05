@@ -13,6 +13,7 @@ export default function Header() {
     const logout = () => {
         localStorage.removeItem("access_token")
         localStorage.removeItem("refresh_token")
+        localStorage.removeItem("userInfo")
         router.replace('/login')
     }
 

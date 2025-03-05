@@ -1,8 +1,8 @@
 // Create functions to call APIs from BE
 import axios from 'axios';
+import { TestCreateForm } from '../schemas/testCreateFormSchema';
 
 const baseUrlTest = 'https://localhost:7096/api/v1/tests'
-const baseUrlQuestion = 'https://localhost:7096/api/v1/questions'
 
 export type TestQueryParams = {
     Title?: string,
@@ -50,4 +50,67 @@ export const getAllTests = async (searchParams: TestQueryParams) => {
         
         return {status: 'error', error: 'Xảy ra lỗi'}
     }
+}
+
+export const getTestDraftById = async (id: string) => {
+    const url = `https://localhost:7096/api/v1/testdraft/${id}`
+
+    try {
+        const response = await axios.get(url)
+
+        return {status: 'success', data: response.data}
+    } catch (error) {
+        console.log(error)
+        
+        return {status: 'error', error: 'Xảy ra lỗi'}
+    }
+}
+
+
+export const updateTestDraft = async (updatedForm: TestCreateForm) => {
+    const url = 'https://localhost:7096/api/v1/testdraft'
+
+    try {
+        
+        await axios.post(url, updatedForm)
+
+    } catch (error) {
+        console.log(error)
+        
+        return {status: 'error', error: 'Xảy ra lỗi'}
+    }
+}
+
+
+export const deleteTestDraftById = async (id: number) => {
+
+    const url = `https://localhost:7096/api/v1/testdraft/${id}`
+    
+    try {
+        
+        await axios.delete(url)
+
+    } catch (error) {
+        console.log(error)
+        
+        return {status: 'error', error: 'Xảy ra lỗi'}
+    }
+}
+
+
+export const createManualForm = async (testDraftId: string) => {
+    const url = `${baseUrlTest}/manual`
+
+    try {
+        
+        const response = await axios.post(url, {testDraftId: testDraftId})
+
+        console.log(response)
+
+    } catch (error) {
+        console.log(error)
+        
+        return {status: 'error', error: 'Xảy ra lỗi'}
+    }
+
 }
