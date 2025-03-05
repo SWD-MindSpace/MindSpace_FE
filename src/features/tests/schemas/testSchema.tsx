@@ -1,3 +1,4 @@
+import { accountSchema } from '@/features/accounts/common/schemas/AccountSchema'
 import { z } from 'zod'
 
 export const testSchema = z.object({
@@ -16,18 +17,7 @@ export const testSchema = z.object({
     description: z.string(),
     questionCount: z.number(),
     price: z.number(),
-    author: z.object({
-        id: z.number(),
-        email: z.string().email(),
-        fullName: z.string(),
-        phoneNumber: z.string().nullable(),
-        userName: z.string(),
-        dateOfBirth: z.string(),
-        imageUrl: z.string().nullable(),
-        status: z.string(),
-        role: z.string().nullable(),
-        school: z.string().nullable()
-    }).optional()
+    author: accountSchema
 })
 
 export type Test = z.infer<typeof testSchema>
