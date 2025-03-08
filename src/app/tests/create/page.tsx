@@ -7,13 +7,12 @@ import { toast } from 'react-toastify'
 import { useSearchParams, useRouter, usePathname } from 'next/navigation'
 import CreateTestForm from '@/features/tests/components/CreateTestForm';
 import QuestionBank from '@/features/tests/components/QuestionBank';
-import QuestionModal from '@/features/tests/components/QuestionModal';
+import DetailedQuestionModal from '@/features/tests/components/DetailedQuestionModal';
 import { v4 as uuidv4 } from 'uuid';
 import { deleteTestDraftById, getTestDraftById, updateTestDraft, createManualForm } from '@/features/tests/APIs';
 import { useDebouncedCallback } from 'use-debounce';
 import { TestCreateForm as TestCreatedForm } from '@/features/tests/schemas/testCreateFormSchema';
-import { Uploader } from "uploader"; // Installed by "react-uploader".
-import { UploadButton } from "react-uploader";
+import NewQuestionModal from '@/features/tests/components/NewQuestionModal';
 
 
 type QuestionOption = {
@@ -22,7 +21,7 @@ type QuestionOption = {
     questionId: number
 }
 
-type Question = {
+export type Question = {
     id: number
     content: string
     questionOptions: QuestionOption[]
@@ -36,6 +35,7 @@ export default function TestCreateForm() {
     const [filteredQuestionBank, setFilteredQuestionBank] = useState<Question[] | null>(null)
     const [totalPages, setTotalPages] = useState<number | null>(null)   // pagination for question bank
     const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null)
+    const [isAddingNewQuestion, setAddingNewQuestion] = useState<boolean>(false)
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [form, setForm] = useState<TestCreatedForm | null>(null)
 
@@ -98,14 +98,21 @@ export default function TestCreateForm() {
 
 
 
-    const fetchSelectedQuestion = async (id) => {
-        const result = await getQuestionById(id)
+    const fetchSelectedQuestion = async (isNewQuestion, id) => {
 
-        if (result.status === 'success') {
-            setSelectedQuestion(result.data)
-        } else {
-            setSelectedQuestion(null)
-            toast.error(result?.error)
+        if (isNewQuestion) {
+            const foundQuestion = form?.questionItems.find((question) => question.id === id)
+            setSelectedQuestion(foundQuestion)
+
+        } else { // existing questions in db
+            const result = await getQuestionById(id)
+
+            if (result.status === 'success') {
+                setSelectedQuestion(result.data)
+            } else {
+                setSelectedQuestion(null)
+                toast.error(result?.error)
+            }
         }
     }
 
@@ -122,7 +129,8 @@ export default function TestCreateForm() {
                 ...form.questionItems,
                 {
                     id: questionId,
-                    content
+                    content,
+                    isNewQuestion: false
                 }
             ]
         })
@@ -133,12 +141,20 @@ export default function TestCreateForm() {
 
     const getInitialTestDraftData = async () => {   // initial form can be a brand new OR incomplete form
 
-        let testDraftId = localStorage.getItem('testDraftId') || null
+        let testDraft = localStorage.getItem('testDraft')
+
+        let testDraftId = ''
 
         // in case of a whole new form, generate test draft id and set it to localStorage
-        if (!testDraftId) {
+        if (!testDraft) {
             testDraftId = `testdrafts:${uuidv4()}`
-            localStorage.setItem('testDraftId', testDraftId)
+            const testDraft = {
+                testDraftId,
+                newQuestionId: 0 // to track negative ids when adding new questions
+            }
+            localStorage.setItem('testDraft', JSON.stringify(testDraft))
+        } else {
+            testDraftId = JSON.parse(testDraft).testDraftId
         }
 
         const result = await getTestDraftById(testDraftId)
@@ -150,12 +166,6 @@ export default function TestCreateForm() {
     }
 
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        console.log(e.target)
-    }
-
-
     const handleFormInputChange = useDebouncedCallback(async (key, value) => {
         await updateTestDraft({
             ...form,
@@ -164,8 +174,9 @@ export default function TestCreateForm() {
         await getInitialTestDraftData()
     }, 0)
 
+
     const handleClearAllFields = async () => {
-        const testDraftId = localStorage.getItem('testDraftId')
+        const testDraftId = JSON.parse(localStorage.getItem('testDraft')).testDraftId
         await deleteTestDraftById(testDraftId)
         window.location.reload()
     }
@@ -173,16 +184,26 @@ export default function TestCreateForm() {
 
 
     const handleClickDeleteQuestion = async (questionId) => {
-        console.log(questionId)
         const newQuestionItems = form.questionItems.filter((item) => item.id !== questionId);
-
-        console.log(newQuestionItems)
 
         await updateTestDraft({
             ...form,
             questionItems: newQuestionItems
         })
         await getInitialTestDraftData()
+    }
+
+
+    const handleAddNewQuestionToForm = async (newQuestion) => {
+
+        await updateTestDraft({
+            ...form,
+            questionItems: [...form.questionItems, newQuestion]
+        })
+
+        await getInitialTestDraftData()
+
+        closeNewQuestionModal()
     }
 
 
@@ -195,16 +216,20 @@ export default function TestCreateForm() {
             authorId: JSON.parse(localStorage.getItem('userInfo')).userId
         })
 
-        const testDraftId = localStorage.getItem('testDraftId')
+        const testDraftId = JSON.parse(localStorage.getItem('testDraft')).testDraftId
 
         console.log('handleSubmitForm: ', testDraftId)
 
-        await createManualForm(testDraftId)
+        const result = await createManualForm(testDraftId)
 
         // upon successful submission
-        localStorage.removeItem('testDraftId')
+        if (result.status === 'success') {
+            localStorage.removeItem('testDraft')
+            window.location.replace(`detail/${result.data}`)
+        } else {
+            toast.error(result.error)
+        }
     }
-
 
 
     const specializationArr = [
@@ -227,6 +252,14 @@ export default function TestCreateForm() {
 
     const handleUploadQuestions = (e) => {
         console.log(e.target)
+    }
+
+    const openNewQuestionModal = () => {
+        setAddingNewQuestion(true)
+    }
+
+    const closeNewQuestionModal = () => {
+        setAddingNewQuestion(false)
     }
 
 
@@ -279,11 +312,12 @@ export default function TestCreateForm() {
                     />
                 }
                 {selectedQuestion &&
-                    <QuestionModal
-                        isOpen={true}
+                    <DetailedQuestionModal
                         selectedQuestion={selectedQuestion}
+                        isOpen={true}
                         onOpenChange={onOpenChange}
                         onCloseQuestion={handleCloseQuestion}
+                        onAddQuestionToForm={handleAddQuestionToForm}
                     />
                 }
 
@@ -292,8 +326,22 @@ export default function TestCreateForm() {
                 {/* ADD NEW QUESTIONS SECTION */}
                 <div className='h-1/6 w-full flex flex-row gap-x-5'>
                     <Button className='bg-primary-blue text-white flex-1 h-12 w-full'>Tải câu hỏi lên form</Button>
-                    <Button className='bg-primary-blue text-white flex-1 h-12'>Thêm câu hỏi mới vào form</Button>
+                    <Button
+                        className='bg-primary-blue text-white flex-1 h-12'
+                        onPress={openNewQuestionModal}
+                    >
+                        Thêm câu hỏi mới vào form
+                    </Button>
                 </div>
+
+                {isAddingNewQuestion &&
+                    <NewQuestionModal
+                        isOpen={true}
+                        onCloseNewQuestionModal={closeNewQuestionModal}
+                        onOpenChange={onOpenChange}
+                        onAddNewQuestionToForm={handleAddNewQuestionToForm}
+                    />
+                }
             </div>
 
 

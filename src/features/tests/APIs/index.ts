@@ -17,6 +17,10 @@ export type TestQueryParams = {
     PageSize?: number
 }
 
+// ==============================
+//             TEST
+// ==============================
+
 export const getAllTests = async (searchParams: TestQueryParams) => {
 
     // append PageSize to params obj
@@ -51,6 +55,53 @@ export const getAllTests = async (searchParams: TestQueryParams) => {
         return { status: 'error', error: 'Xảy ra lỗi' }
     }
 }
+
+
+export const createManualForm = async (testDraftId: string) => {
+    const url = `${baseUrlTest}/manual`
+
+    try {
+        
+        const response = await axios.post(url, {testDraftId: testDraftId})
+
+        const locationUrl = response.headers.get('Location')
+
+        if (!locationUrl) throw new Error('Location header not found')
+
+        const testResponseId = locationUrl.split('/').pop()
+
+        if (!testResponseId) throw new Error('Invalid response location')
+
+        return {status: 'success', data: testResponseId}
+
+    } catch (error) {
+        console.log(error)
+
+        const errorMessage = typeof(error) === 'string' ? error.message : 'Xảy ra lỗi'
+
+        return {status: 'error', error: errorMessage}
+    }
+
+}
+
+export const getTestById = async (id: number) => {
+    const url = `https://localhost:7096/api/v1/tests/${id}`
+
+    try {
+        const response = await axios.get(url)
+
+        return {status: 'success', data: response.data}
+    } catch (error) {
+        console.log(error)
+        
+        return {status: 'error', error: 'Xảy ra lỗi'}
+    }
+}
+
+
+// ==================================
+//             TEST DRAFT
+// ==================================
 
 export const getTestDraftById = async (id: string) => {
     const url = `https://localhost:7096/api/v1/testdraft/${id}`
@@ -95,22 +146,4 @@ export const deleteTestDraftById = async (id: number) => {
         
         return {status: 'error', error: 'Xảy ra lỗi'}
     }
-}
-
-
-export const createManualForm = async (testDraftId: string) => {
-    const url = `${baseUrlTest}/manual`
-
-    try {
-        
-        const response = await axios.post(url, {testDraftId: testDraftId})
-
-        console.log(response)
-
-    } catch (error) {
-        console.log(error)
-        
-        return {status: 'error', error: 'Xảy ra lỗi'}
-    }
-
 }

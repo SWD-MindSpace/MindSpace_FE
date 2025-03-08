@@ -11,7 +11,13 @@ import { LiaCircleSolid } from "react-icons/lia";
 
 
 
-export default function QuestionModal({ isOpen, onOpenChange, onCloseQuestion, selectedQuestion }) {
+export default function DetailedQuestionModal({ selectedQuestion, isOpen, onOpenChange, onCloseQuestion, onAddQuestionToForm }) {
+
+    const handleAddQuestionsToForm = () => {
+        onAddQuestionToForm(selectedQuestion.id, selectedQuestion.content)
+        onCloseQuestion()
+    }
+
     return (
         <Modal
             backdrop="opaque"
@@ -33,9 +39,9 @@ export default function QuestionModal({ isOpen, onOpenChange, onCloseQuestion, s
                             <p className='text-md font-semibold mt-2'>{selectedQuestion.content}</p>
 
                             <div className='flex flex-col gap-y-3'>
-                                {selectedQuestion.questionOptions.map(option => (
+                                {selectedQuestion.questionOptions.map((option, index) => (
                                     <Card
-                                        key={option.id}
+                                        key={index}
                                         className='w-full border-1 py-2 px-3 border-gray-500'
                                         shadow="sm"
                                         radius="none"
@@ -56,9 +62,6 @@ export default function QuestionModal({ isOpen, onOpenChange, onCloseQuestion, s
                             <Button color="danger" onPress={onCloseQuestion}>
                                 Đóng
                             </Button>
-                            {/* <Button color="primary" onPress={onCloseQuestion}>
-                                Thêm
-                            </Button> */}
                         </ModalFooter>
                     </>
                 )}

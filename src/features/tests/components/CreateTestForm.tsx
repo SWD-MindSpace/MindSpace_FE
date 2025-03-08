@@ -6,8 +6,15 @@ import { Textarea } from "@heroui/input";
 import { BsTrash3 } from "react-icons/bs";
 
 
-export default function CreateTestForm({ form, specializationArr, onSubmit, onFormInputChange, onClearAllFields, onClickQuestion, onClickDeleteQuestion }) {
-
+export default function CreateTestForm({
+    form,
+    specializationArr,
+    onSubmit,
+    onFormInputChange,
+    onClearAllFields,
+    onClickQuestion,
+    onClickDeleteQuestion
+}) {
 
     const questionInFormStyles = {
         base: 'cursor-pointer',
@@ -43,6 +50,8 @@ export default function CreateTestForm({ form, specializationArr, onSubmit, onFo
                             name="title"
                             placeholder="Nhập tiêu đề bài test"
                             type='text'
+                            isRequired
+                            errorMessage={'Không được bỏ trống tiêu đề'}
                             defaultValue={form?.title || ''}
                             onValueChange={(value) => onFormInputChange('title', value)}
                         />
@@ -61,6 +70,8 @@ export default function CreateTestForm({ form, specializationArr, onSubmit, onFo
                             name="description"
                             placeholder="Nhập mô tả về bài test"
                             type='text'
+                            isRequired
+                            errorMessage={'Không được bỏ trống mô tả'}
                             defaultValue={form?.description || ''}
                             onValueChange={(value) => onFormInputChange('description', value)}
                         />
@@ -79,6 +90,8 @@ export default function CreateTestForm({ form, specializationArr, onSubmit, onFo
                             name="testCode"
                             placeholder="Nhập mã bài test"
                             type='text'
+                            isRequired
+                            errorMessage={'Không được bỏ trống mã bài test'}
                             defaultValue={form?.testCode || ''}
                             onValueChange={(value) => onFormInputChange('testCode', value)}
                         />
@@ -96,6 +109,8 @@ export default function CreateTestForm({ form, specializationArr, onSubmit, onFo
                             size="lg"
                             radius="sm"
                             placeholder="Chọn loại bài test"
+                            isRequired
+                            errorMessage={'Bắt buộc chọn loại bài test'}
                             defaultSelectedKeys={form?.testCategoryId ? [form.testCategoryId.toString()] : []}
                             onChange={(e) => onFormInputChange('testCategoryId', Number(e.target.value))}
 
@@ -118,6 +133,8 @@ export default function CreateTestForm({ form, specializationArr, onSubmit, onFo
                             size="lg"
                             radius="sm"
                             placeholder="Chọn chuyên môn"
+                            isRequired
+                            errorMessage={'Bắt buộc chọn loại chuyên môn'}
                             defaultSelectedKeys={form?.specializationId ? [form.specializationId.toString()] : []}
                             onChange={(e) => onFormInputChange('specializationId', Number(e.target.value))}
                         >
@@ -144,6 +161,8 @@ export default function CreateTestForm({ form, specializationArr, onSubmit, onFo
                             size="lg"
                             radius="sm"
                             placeholder="Chọn đối tượng"
+                            isRequired
+                            errorMessage={'Bắt buộc chọn loại đối tượng'}
                             defaultSelectedKeys={form?.targetUser ? [form.targetUser.toString()] : []}
                             onChange={(e) => onFormInputChange('targetUser', Number(e.target.value))}
                         >
@@ -166,6 +185,8 @@ export default function CreateTestForm({ form, specializationArr, onSubmit, onFo
                             name="price"
                             placeholder="Nhập giá"
                             type='text'
+                            isRequired
+                            errorMessage={'Bắt buộc nhập giá'}
                             defaultValue={form?.price || ''}
                             onValueChange={(value) => onFormInputChange('price', Number(value))}
                         />
@@ -192,7 +213,7 @@ export default function CreateTestForm({ form, specializationArr, onSubmit, onFo
                                                 label={`Question ${index + 1}`}
                                                 variant="bordered"
                                                 classNames={questionInFormStyles}
-                                                onClick={() => onClickQuestion(item.id)}
+                                                onClick={() => onClickQuestion(item.isNewQuestion, item.id)}
                                             />
 
                                             <BsTrash3

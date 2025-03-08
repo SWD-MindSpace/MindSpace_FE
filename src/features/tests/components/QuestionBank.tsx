@@ -49,7 +49,7 @@ export default function QuestionBank({ data, searchParams, totalPages, onInputCh
                                         className='w-5/6 flex justify-center pl-4 border-1 border-gray-400'
                                         isPressable
                                         shadow='sm'
-                                        onPress={() => onClickQuestion(question.id)}
+                                        onPress={() => onClickQuestion(question.isNewQuestion, question.id)}
                                     >
                                         <div className='w-full text-left truncate'>{question.content}</div>
                                     </Card>
