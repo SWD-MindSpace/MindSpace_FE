@@ -81,6 +81,7 @@ export default function TimeSlotCalendar() {
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
   const [slotsFromApi, setSlotsFromApi] = useState<TimeSlotFromApi[]>([]);
   const [selectedTimeslots, setSelectedTimeslots] = useState<TimeSlotToApi[]>([]);
+  const [showApplyButton, setShowApplyButton] = useState<boolean>(true);
 
   // Initialize dates from URL params if available
   useEffect(() => {
@@ -120,6 +121,9 @@ export default function TimeSlotCalendar() {
             }));
 
           setSelectedTimeslots(availableSlots);
+
+          // Show Apply button only if the current week has no slots
+          setShowApplyButton(true);
         })
         .catch((error) => console.error('Error fetching schedule:', error));
     }
@@ -273,6 +277,69 @@ export default function TimeSlotCalendar() {
     }
   };
 
+  // Function to apply last week's schedule to current week
+  const applyLastWeekSchedule = async () => {
+    try {
+      // Calculate last week's date range
+      const lastWeekStartDate = new Date(startDate.getTime() - 7 * 86400000); // Subtract 7 days
+      const lastWeekStartDateStr = lastWeekStartDate.toISOString().split('T')[0];
+      const lastWeekEndDate = new Date(lastWeekStartDate.getTime() + 6 * 86400000); // Add 6 days
+      const lastWeekEndDateStr = lastWeekEndDate.toISOString().split('T')[0];
+
+      console.log(`Fetching last week data: ${lastWeekStartDateStr} to ${lastWeekEndDateStr}`);
+
+      // Fetch last week's schedule
+      const response = await fetch(
+        `${baseUrl}?PsychologistId=${psychologistId}&MinDate=${lastWeekStartDateStr}&MaxDate=${lastWeekEndDateStr}`
+      );
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch last week's schedule: ${response.status}`);
+      }
+
+      const data: ScheduleResponse = await response.json();
+      const lastWeekSlots = data.flatMap((item) => item.timeSlots);
+
+      console.log('Last week slots:', lastWeekSlots);
+
+      // If there are no slots from last week
+      if (lastWeekSlots.length === 0) {
+        alert('No schedule available from last week to apply.');
+        return;
+      }
+
+      // Convert last week's slots to this week (adding 7 days to each date)
+      const thisWeekSlots: TimeSlotToApi[] = lastWeekSlots
+        .filter(slot => slot.status === 0) // Only get available slots from last week
+        .map(slot => {
+          // Parse the date from last week
+          const slotDate = new Date(slot.date);
+          // Add 7 days to get this week's date
+          const newDate = new Date(slotDate.getTime() + 7 * 86400000);
+          const newDateStr = newDate.toISOString().split('T')[0];
+
+          return {
+            startTime: slot.startTime,
+            endTime: slot.endTime,
+            date: newDateStr
+          };
+        });
+
+      console.log('Converted to this week slots:', thisWeekSlots);
+
+      // Set the new slots
+      setSelectedTimeslots(thisWeekSlots);
+
+      // Hide the apply button after applying
+      setShowApplyButton(false);
+
+      alert('Last week schedule applied successfully! Click Save to commit changes.');
+    } catch (error) {
+      console.error('Error applying last week schedule:', error);
+      alert('Failed to apply last week schedule.');
+    }
+  };
+
   // Tạo danh sách 7 ngày dựa trên startDate
   const weekDays = Array.from({ length: 7 }, (_, i): Date => {
     const date = new Date(startDate);
@@ -322,6 +389,16 @@ export default function TimeSlotCalendar() {
           dateFormat="dd/MM/yyyy"
           className={styles.datePicker}
         />
+
+        {/* Apply Last Week Schedule Button */}
+        {showApplyButton && (
+          <button
+            onClick={applyLastWeekSchedule}
+            className={styles.applyButton || `${styles.saveButton} ml-4`}
+          >
+            Apply schedule of last week
+          </button>
+        )}
       </div>
 
       <div className={styles.calendarContent}>

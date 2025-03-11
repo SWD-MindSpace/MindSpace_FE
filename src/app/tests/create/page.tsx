@@ -225,7 +225,6 @@ export default function TestCreateForm() {
         // upon successful submission
         if (result.status === 'success') {
             localStorage.removeItem('testDraft')
-            await deleteTestDraftById(testDraftId)
             window.location.replace(`detail/${result.data}`)
         } else {
             toast.error(result.error)
