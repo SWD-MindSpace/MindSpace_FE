@@ -1,8 +1,8 @@
 // Create functions to call APIs from BE
 import axios from 'axios';
 
-const baseUrlAccounts = 'https://localhost:7096/api/v1/identity/accounts'
-const baseUrlStudents = "https://localhost:7096/api/v1/identity/accounts/students"
+const baseUrlAccounts = 'https://localhost:7096/api/v1/identities/accounts'
+const baseUrlStudents = "https://localhost:7096/api/v1/identities/accounts/students"
 
 export type AccountQueryParams = {
     SearchName?: string,
