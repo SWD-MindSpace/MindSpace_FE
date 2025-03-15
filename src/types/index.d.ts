@@ -15,3 +15,20 @@ export type ActionResult<T> =
     { status: 'success', data: T } | { status: 'error', error: string | ZodIssue[] }
 
 export type TableData = TestTableData | QuestionTableData | ArticleTableData | SupportingProgramTableData | BlogTableData | AccountTableData
+
+// types.ts
+export interface TimeSlot {
+    id: number;
+    startTime: string;
+    endTime: string;
+    date: string;
+    psychologistId: number;
+    status: number;
+}
+
+export interface PsychologistSchedule {
+    psychologistId: number;
+    date: string;
+    weekDay: string;
+    timeSlots: TimeSlot[];
+}
