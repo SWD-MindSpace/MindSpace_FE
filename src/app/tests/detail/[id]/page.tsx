@@ -9,6 +9,7 @@ import { Textarea } from "@heroui/input";
 import { useDisclosure } from '@heroui/react';
 import { toast } from "react-toastify";
 import DetailedQuestionModal from "@/features/tests/components/DetailedQuestionModal";
+import { Question } from "../../create/page";
 
 
 export default function TestDetailPage() {
@@ -68,7 +69,7 @@ export default function TestDetailPage() {
     }
 
 
-    const fetchSelectedQuestion = async (isNewQuestion, id) => {
+    const fetchSelectedQuestion = async (isNewQuestion: any, id: any) => {
 
         if (isNewQuestion) {
             const foundQuestion = form?.questionItems.find((question) => question.id === id)
@@ -263,7 +264,130 @@ export default function TestDetailPage() {
 
 
 
-           
+
         </>
     )
 }
+
+// statistics section:
+// 'use client';
+
+// import React, { useState, useEffect } from 'react';
+// import { format } from 'date-fns';
+// import ScoreRankPieChart from '@/features/dashboard/components/ScoreRankPieChart';
+// import { Test } from '@/features/tests/schemas/testSchema';
+
+// export default function TestResultsPage() {
+//     const [selectedTestId, setSelectedTestId] = useState<number>(1);
+//     const [tests, setTests] = useState<Test[]>([]);
+//     const [isLoading, setIsLoading] = useState<boolean>(true);
+//     const [startDate, setStartDate] = useState<string>('');
+//     const [endDate, setEndDate] = useState<string>('');
+
+//     const baseTestResponseStatisticsUrl = `https://localhost:7096/api/v1/statistics/test-responses/time-analysis`;
+//     const baseTestUrl = `https://localhost:7096/api/v1/tests`;
+
+//     const schoolId = 1;// thay the bang schoolId cua user hien tai
+
+//     // Tạo URL API dựa trên các tham số đã chọn
+//     const buildApiUrl = () => {
+//         let url = baseTestResponseStatisticsUrl;
+//         const params = new URLSearchParams();
+//         params.append('testId', selectedTestId.toString());
+//         if (startDate) params.append('startDate', startDate);
+//         if (endDate) params.append('endDate', endDate);
+//         params.append('schoolId', schoolId.toString()) // thay the bang schoolId cua user hien tai
+
+//         // Thêm query parameters vào URL nếu có
+//         const queryString = params.toString();
+//         if (queryString) {
+//             url += `?${queryString}`;
+//         }
+
+//         return url;
+//     };
+
+//     const apiUrl = buildApiUrl();
+
+//     // Fetch danh sách bài test khi component mount
+//     useEffect(() => {
+//         const fetchMostRecentTests = async () => {
+//             try {
+//                 setIsLoading(true);
+//                 const response = await fetch(`${baseTestUrl}/most-recent-test?SchoolId=${schoolId}`);
+//                 console.log(response);
+//                 if (!response.ok) {
+//                     throw new Error(`Failed to fetch most recent test: ${response.statusText}`);
+//                 }
+
+//                 const data = await response.json();
+//                 // Validate that data contains an id and is a number
+//                 if (data && typeof data.id === 'number') {
+//                     setSelectedTestId(data.id);
+//                 }
+//             } catch (error) {
+//                 console.error('Lỗi khi lấy bài test gần nhất:', error);
+//             } finally {
+//                 setIsLoading(false);
+//             }
+//         };
+
+//         fetchMostRecentTests();
+
+//         const today = new Date();
+//         const thirtyDaysAgo = new Date();
+//         thirtyDaysAgo.setDate(today.getDate() - 30);
+
+//         setEndDate(format(today, 'yyyy-MM-dd'));
+//         setStartDate(format(thirtyDaysAgo, 'yyyy-MM-dd'));
+//     }, []);
+
+//     const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//         setStartDate(e.target.value);
+//     };
+
+//     const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//         setEndDate(e.target.value);
+//     };
+
+//     return (
+//         <div className="container mx-auto py-8">
+//             <h1 className="text-2xl font-bold mb-6">Kết quả bài test</h1>
+
+//             <div className="bg-white p-4 rounded-lg shadow-md mb-6">
+//                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+//                     {/* Date picker cho ngày bắt đầu */}
+//                     <div>
+//                         <label htmlFor="start-date" className="block text-sm font-medium text-gray-700 mb-1">
+//                             Từ ngày
+//                         </label>
+//                         <input
+//                             type="date"
+//                             id="start-date"
+//                             value={startDate}
+//                             onChange={handleStartDateChange}
+//                             className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+//                         />
+//                     </div>
+
+//                     {/* Date picker cho ngày kết thúc */}
+//                     <div>
+//                         <label htmlFor="end-date" className="block text-sm font-medium text-gray-700 mb-1">
+//                             Đến ngày
+//                         </label>
+//                         <input
+//                             type="date"
+//                             id="end-date"
+//                             value={endDate}
+//                             onChange={handleEndDateChange}
+//                             className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+//                         />
+//                     </div>
+//                 </div>
+//             </div>
+
+//             {/* Hiển thị biểu đồ */}
+//             <ScoreRankPieChart apiUrl={apiUrl} />
+//         </div>
+//     );
+// }
