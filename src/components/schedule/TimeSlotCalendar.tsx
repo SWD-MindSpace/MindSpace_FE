@@ -4,8 +4,10 @@ import { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styles from './styles/TimeslotCalendar.module.css';
+import { post } from '@/lib/apiCaller';
 
-const baseUrl = `https://localhost:7096/api/v1/psychologist-schedules`;
+const baseUrl = process.env.NEXT_PUBLIC_API_URL + '/psychologist-schedules';
+const psychologistScheduleEndpoint = '/psychologist-schedules';
 
 // Interface cho TimeSlot lấy từ API
 interface TimeSlotFromApi {
@@ -44,7 +46,18 @@ interface SaveScheduleRequest {
 }
 
 export default function TimeSlotCalendar() {
-  const psychologistId = 8;
+  const currentUser = localStorage.getItem('userInfo');
+  console.log(currentUser);
+  const psychologistId = currentUser ? JSON.parse(currentUser).userId : null;
+
+  if (psychologistId === null) {
+    alert('You must be logged in to access this page.');
+    window.location.href = '/login';
+  }
+  if (currentUser === null || JSON.parse(currentUser).role != "Psychologist") {
+    alert('You must be a psychologist to access this page.');
+    window.location.href = '/login';
+  }
 
   const getNearestSunday = (fromDate?: Date): Date => {
     const date = fromDate ? new Date(fromDate) : new Date();
@@ -217,7 +230,7 @@ export default function TimeSlotCalendar() {
       const uniqueSlots = Array.from(
         new Set(selectedTimeslots.map((slot) => JSON.stringify({ date: slot.date, startTime: slot.startTime, endTime: slot.endTime })))
       ).map((json) => JSON.parse(json));
-
+      console.log(uniqueSlots);
       // Prepare payload
       const payload: SaveScheduleRequest = {
         psychologistId,
@@ -226,16 +239,12 @@ export default function TimeSlotCalendar() {
         timeslots: uniqueSlots,
       };
 
-      console.log("Saving with date range:", startDateStr, "to", endDateStr);
-
       // Save to API
-      const saveResponse = await fetch(baseUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-
-      if (saveResponse.ok) {
+      const saveResponse = await post(psychologistScheduleEndpoint,
+        payload,
+      );
+      console.log(saveResponse);
+      if (saveResponse.status === 200 || saveResponse.status === 201 || saveResponse.status === 204) {
         // Update URL with the current week's start and end dates
         const url = new URL(window.location.href);
         url.searchParams.set('psychologistId', psychologistId.toString());
@@ -268,12 +277,9 @@ export default function TimeSlotCalendar() {
             console.error('Error refreshing schedule:', error);
             alert('Schedule saved, but refreshing data failed. Please reload the page.');
           });
-      } else {
-        throw new Error(`Failed to save: ${saveResponse.status}`);
       }
     } catch (error) {
       console.error('Error saving schedule:', error);
-      alert('Failed to save schedule.');
     }
   };
 
