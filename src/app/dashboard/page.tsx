@@ -20,10 +20,10 @@ import { Test } from '@/features/tests/schemas/testSchema';
 // Sample data
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
 // const currentUser = localStorage.getItem('userInfo');
-// console.log('currentUser:', currentUser);
 
+// uncomment the above line when api ready
+// const schoolId = currentUser ? JSON.parse(currentUser).schoolId : null; 
 const schoolId = 1
-// const schoolId = currentUser ? JSON.parse(currentUser).schoolId : null; // uncomment the above line when api ready
 
 const Dashboard = () => {
     const today = new Date();
@@ -56,7 +56,6 @@ const Dashboard = () => {
 
             // Fetch Overview statistics
             const overviewDataResponse = await getOverviewStatistics(params);
-            console.log('overviewData:', overviewDataResponse);
             setOverviewData(overviewDataResponse.data);
 
             // Fetch Recent Tests statistics

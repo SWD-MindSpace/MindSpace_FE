@@ -1,6 +1,7 @@
 // Create functions to call APIs from BE
 import axios from 'axios';
 import { TestCreateForm } from '../schemas/testCreateFormSchema';
+import { get } from '@/lib/apiCaller';
 
 const baseUrlTest = 'https://localhost:7096/api/v1/tests'
 
@@ -61,8 +62,8 @@ export const createManualForm = async (testDraftId: string) => {
     const url = `${baseUrlTest}/manual`
 
     try {
-        
-        const response = await axios.post(url, {testDraftId: testDraftId})
+
+        const response = await axios.post(url, { testDraftId: testDraftId })
 
         const locationUrl = response.headers.get('Location')
 
@@ -72,14 +73,14 @@ export const createManualForm = async (testDraftId: string) => {
 
         if (!testResponseId) throw new Error('Invalid response location')
 
-        return {status: 'success', data: testResponseId}
+        return { status: 'success', data: testResponseId }
 
     } catch (error) {
         console.log(error)
 
-        const errorMessage = typeof(error) === 'string' ? error.message : 'Xảy ra lỗi'
+        const errorMessage = typeof (error) === 'string' ? error.message : 'Xảy ra lỗi'
 
-        return {status: 'error', error: errorMessage}
+        return { status: 'error', error: errorMessage }
     }
 
 }
@@ -90,11 +91,11 @@ export const getTestById = async (id: number) => {
     try {
         const response = await axios.get(url)
 
-        return {status: 'success', data: response.data}
+        return { status: 'success', data: response.data }
     } catch (error) {
         console.log(error)
-        
-        return {status: 'error', error: 'Xảy ra lỗi'}
+
+        return { status: 'error', error: 'Xảy ra lỗi' }
     }
 }
 
@@ -109,11 +110,11 @@ export const getTestDraftById = async (id: string) => {
     try {
         const response = await axios.get(url)
 
-        return {status: 'success', data: response.data}
+        return { status: 'success', data: response.data }
     } catch (error) {
         console.log(error)
-        
-        return {status: 'error', error: 'Xảy ra lỗi'}
+
+        return { status: 'error', error: 'Xảy ra lỗi' }
     }
 }
 
@@ -122,13 +123,13 @@ export const updateTestDraft = async (updatedForm: TestCreateForm) => {
     const url = 'https://localhost:7096/api/v1/testdraft'
 
     try {
-        
+
         await axios.post(url, updatedForm)
 
     } catch (error) {
         console.log(error)
-        
-        return {status: 'error', error: 'Xảy ra lỗi'}
+
+        return { status: 'error', error: 'Xảy ra lỗi' }
     }
 }
 
@@ -136,14 +137,34 @@ export const updateTestDraft = async (updatedForm: TestCreateForm) => {
 export const deleteTestDraftById = async (id: number) => {
 
     const url = `https://localhost:7096/api/v1/testdraft/${id}`
-    
+
     try {
-        
+
         await axios.delete(url)
 
     } catch (error) {
         console.log(error)
-        
-        return {status: 'error', error: 'Xảy ra lỗi'}
+
+        return { status: 'error', error: 'Xảy ra lỗi' }
     }
+}
+
+// Test response Statistics
+export type TestResponseStatisticsQueryParams = {
+    TestId: number,
+    SchoolId?: number,
+    StartDate?: string,
+    EndDate?: string,
+}
+const statisticsEndpoint = '/statistics';
+export const getScoreRankAnalysis = async (searchParams: TestResponseStatisticsQueryParams) => {
+    return get(`${statisticsEndpoint}/test-responses/score-rank-analysis`, searchParams)
+}
+
+export const getTimeAnalysis = async (searchParams: TestResponseStatisticsQueryParams) => {
+    return get(`${statisticsEndpoint}/test-responses/time-analysis`, searchParams)
+}
+
+export const getQuestionResponseAnalysis = async (searchParams: TestResponseStatisticsQueryParams) => {
+    return get(`${statisticsEndpoint}/test-responses/question-responses-analysis`, searchParams)
 }
