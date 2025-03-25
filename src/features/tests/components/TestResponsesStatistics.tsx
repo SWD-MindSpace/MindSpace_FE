@@ -30,11 +30,8 @@ interface QuestionResponseStatistic {
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
 
 export default function TestResponseStatistics() {
-    // const currentUser = localStorage.getItem('userInfo');
-
-    // uncomment the above line when api ready
-    // const schoolId = currentUser ? JSON.parse(currentUser).schoolId : null; 
-    const schoolId = 1;
+    const currentUser = localStorage.getItem('userInfo');
+    const schoolId = currentUser ? JSON.parse(currentUser).schoolId : null;
     const params = useParams();
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');

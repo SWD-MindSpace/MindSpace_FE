@@ -8,6 +8,7 @@ import {
     CardHeader,
     CardTitle
 } from '@/components/dashboard/Card';
+import Link from 'next/link'
 import { Button } from '@/components/dashboard/Button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/dashboard/Tab';
 import { getOverviewStatistics, getAppointmentStatistics, getSupportingProgramStatistics, StatisticsQueryParams, getRecentTests } from '@/features/dashboard/APIs';
@@ -19,13 +20,10 @@ import { Test } from '@/features/tests/schemas/testSchema';
 
 // Sample data
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
-// const currentUser = localStorage.getItem('userInfo');
-
-// uncomment the above line when api ready
-// const schoolId = currentUser ? JSON.parse(currentUser).schoolId : null; 
-const schoolId = 1
-
+const currentUser = localStorage.getItem('userInfo');
+const schoolId = currentUser ? JSON.parse(currentUser).schoolId : null;
 const Dashboard = () => {
+    console.log(schoolId);
     const today = new Date();
     const thirtyDaysAgo = new Date(today);
     thirtyDaysAgo.setDate(today.getDate() - 30);
@@ -122,19 +120,23 @@ const Dashboard = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                 <Card>
                     <CardContent className="p-6">
-                        <div className="flex items-center justify-between">
-                            <h3 className="text-lg font-medium">Học sinh</h3>
-                            <span className="text-2xl font-bold">{overviewData?.totalStudentsCount}</span>
-                        </div>
+                        <Link href="/accounts/students" className="block">
+                            <div className="flex items-center justify-between">
+                                <h3 className="text-lg font-medium">Học sinh</h3>
+                                <span className="text-2xl font-bold">{overviewData?.totalStudentsCount}</span>
+                            </div>
+                        </Link>
                     </CardContent>
                 </Card>
 
                 <Card>
                     <CardContent className="p-6">
-                        <div className="flex items-center justify-between">
-                            <h3 className="text-lg font-medium">Bài kiểm tra và khảo sát tâm lý</h3>
-                            <span className="text-2xl font-bold">{overviewData?.totalTestsCount}</span>
-                        </div>
+                        <Link href="/accounts/students" className="block">
+                            <div className="flex items-center justify-between">
+                                <h3 className="text-lg font-medium">Bài kiểm tra và khảo sát tâm lý</h3>
+                                <span className="text-2xl font-bold">{overviewData?.totalTestsCount}</span>
+                            </div>
+                        </Link>
                     </CardContent>
                 </Card>
 

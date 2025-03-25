@@ -22,15 +22,18 @@ export default function ParentListPage() {
     const router = useRouter()
     const pathname = usePathname()
     const searchParams = useSearchParams();
+    const currentUser = localStorage.getItem('userInfo');
+    const schoolId = currentUser ? JSON.parse(currentUser).schoolId : null;
 
 
     const fetchData = async () => {
         let params = Object.fromEntries(searchParams) as AccountQueryParams
         params.RoleId = 1
+        params.SchoolId = schoolId
 
-        const result = await getAllAccounts(params)
+        // const result = await getAllAccounts(params)
         // sau nay xu ly duoc access token roi thi se dung ham duoi nay
-        // const result = await getAllStudents(params)
+        const result = await getAllStudents(params)
 
         if (result.status === 'success') {
             const { data, count } = result.data
