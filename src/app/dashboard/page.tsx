@@ -131,7 +131,7 @@ const Dashboard = () => {
 
                 <Card>
                     <CardContent className="p-6">
-                        <Link href="/accounts/students" className="block">
+                        <Link href="/tests" className="block">
                             <div className="flex items-center justify-between">
                                 <h3 className="text-lg font-medium">Bài kiểm tra và khảo sát tâm lý</h3>
                                 <span className="text-2xl font-bold">{overviewData?.totalTestsCount}</span>
@@ -142,19 +142,23 @@ const Dashboard = () => {
 
                 <Card>
                     <CardContent className="p-6">
-                        <div className="flex items-center justify-between">
-                            <h3 className="text-lg font-medium">Chương trình hỗ trợ</h3>
-                            <span className="text-2xl font-bold">{overviewData?.totalSupportingProgramCount}</span>
-                        </div>
+                        <Link href="/supporting-programs" className="block">
+                            <div className="flex items-center justify-between">
+                                <h3 className="text-lg font-medium">Chương trình hỗ trợ</h3>
+                                <span className="text-2xl font-bold">{overviewData?.totalSupportingProgramCount}</span>
+                            </div>
+                        </Link>
                     </CardContent>
                 </Card>
 
                 <Card>
                     <CardContent className="p-6">
-                        <div className="flex items-center justify-between">
-                            <h3 className="text-lg font-medium">Tài nguyên</h3>
-                            <span className="text-2xl font-bold">{overviewData?.totalResourcesCount}</span>
-                        </div>
+                        <Link href="/resources/blogs" className="block">
+                            <div className="flex items-center justify-between">
+                                <h3 className="text-lg font-medium">Tài nguyên</h3>
+                                <span className="text-2xl font-bold">{overviewData?.totalResourcesCount}</span>
+                            </div>
+                        </Link>
                     </CardContent>
                 </Card>
             </div>
