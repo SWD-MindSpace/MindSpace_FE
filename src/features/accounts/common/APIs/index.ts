@@ -1,8 +1,6 @@
 // Create functions to call APIs from BE
-import axios from 'axios';
-
-const baseUrlAccounts = 'https://localhost:7096/api/v1/identities/accounts'
-const baseUrlStudents = "https://localhost:7096/api/v1/identities/accounts/students"
+import { get } from '../../../../lib/apiCaller';
+const baseUrlAccounts = '/identities/accounts';
 
 export type AccountQueryParams = {
     SearchName?: string,
@@ -37,7 +35,7 @@ const getAllEntities = async (url: string) => {
 
     try {
         // call API
-        const response = await axios.get(url)
+        const response = await get(url)
 
         const responseData = response?.data
 
@@ -62,6 +60,6 @@ export const getAllAccounts = async (searchParams: AccountQueryParams) => {
 
 export const getAllStudents = async (searchParams: AccountQueryParams) => {
     const queryString = getQueryString(searchParams)
-    const url = getUrl(queryString, baseUrlStudents)
+    const url = getUrl(queryString, `${baseUrlAccounts}/students`)
     return getAllEntities(url);
 }
