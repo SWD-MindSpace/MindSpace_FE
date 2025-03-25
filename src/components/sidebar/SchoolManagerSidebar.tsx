@@ -11,6 +11,9 @@ type Props = {
 export default function SchoolManagerSidebar({ itemClasses, subLinkStyle, mainLinkStyle }: Props) {
     return (
         <div>
+            <div className={mainLinkStyle}>
+                <Link href="/dashboard">Dashboard</Link>
+            </div>
             <Accordion
                 selectionMode="multiple"
                 itemClasses={itemClasses}

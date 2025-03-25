@@ -24,6 +24,8 @@ export default function StudentListPage() {
     const router = useRouter()
     const pathname = usePathname()
     const searchParams = useSearchParams();
+    const currentUser = localStorage.getItem('userInfo');
+    const schoolId = currentUser ? JSON.parse(currentUser).schoolId : null;
 
 
     const fetchData = async () => {

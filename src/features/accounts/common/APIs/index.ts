@@ -1,7 +1,7 @@
 // Create functions to call APIs from BE
+
 import { ROLE_ID } from '../constants';
 import axiosInstance from '@/lib/interceptor';
-
 
 export type AccountQueryParams = {
     SearchName?: string,

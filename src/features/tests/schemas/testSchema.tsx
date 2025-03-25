@@ -9,7 +9,7 @@ export const testSchema = z.object({
         id: z.number(),
         name: z.string()
     }).optional(),
-    specializationId: z.object({
+    specialization: z.object({
         id: z.number(),
         name: z.string()
     }).optional(),

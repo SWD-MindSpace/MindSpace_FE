@@ -10,6 +10,10 @@ import { useDisclosure } from '@heroui/react';
 import { toast } from "react-toastify";
 import DetailedQuestionModal from "@/features/tests/components/DetailedQuestionModal";
 import { getQuestionById } from "@/features/questions/APIs";
+import { Question } from "../../create/page";
+import { DateRangePicker } from '@/components/dashboard/DateRangePicker';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import TestResponseStatistics from "@/features/tests/components/TestResponsesStatistics";
 
 
 export default function TestDetailPage() {
@@ -69,7 +73,7 @@ export default function TestDetailPage() {
     }
 
 
-    const fetchSelectedQuestion = async (id: number) => {
+const fetchSelectedQuestion = async (id: number) => {
 
         // existing questions in db
         const result = await getQuestionById(id)
@@ -89,13 +93,13 @@ export default function TestDetailPage() {
 
 
     useEffect(() => {
-        fetchTestById()
+        fetchTestById(Number(params.id))
     }, [params])
 
     return (
         <>
             {loading && (
-                <div className='flex justify-center items-center w-full text-center'>
+                <div className='flex flex-col items-center w-full space-y-4 p-4'>
                     <Card
                         className='h-full -z-0 w-[70%]'
                         radius='sm'
@@ -252,13 +256,10 @@ export default function TestDetailPage() {
                             </div>
 
                         </CardBody>
-
-
                     </Card>
-
+                    <TestResponseStatistics />
                 </div>
             )}
-
 
 
             {selectedQuestion &&
@@ -269,6 +270,7 @@ export default function TestDetailPage() {
                     onCloseQuestion={handleCloseQuestion}
                 />
             }
+
         </>
     )
 }

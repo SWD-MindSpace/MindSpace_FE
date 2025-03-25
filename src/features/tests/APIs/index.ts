@@ -1,5 +1,5 @@
-// Create functions to call APIs from BE
 import axiosInstance from '@/lib/interceptor';
+import { get } from '../../../../lib/apiCaller';
 import { TestCreateForm } from '../schemas/testCreateFormSchema';
 
 
@@ -162,4 +162,25 @@ export const deleteTestDraftById = async (id: number) => {
         return {status: 'error', error: 'Xảy ra lỗi'}
     }
 
+}
+
+
+// Test response Statistics
+export type TestResponseStatisticsQueryParams = {
+    TestId: number,
+    SchoolId?: number,
+    StartDate?: string,
+    EndDate?: string,
+}
+const statisticsEndpoint = '/statistics';
+export const getScoreRankAnalysis = async (searchParams: TestResponseStatisticsQueryParams) => {
+    return get(`${statisticsEndpoint}/test-responses/score-rank-analysis`, searchParams)
+}
+
+export const getTimeAnalysis = async (searchParams: TestResponseStatisticsQueryParams) => {
+    return get(`${statisticsEndpoint}/test-responses/time-analysis`, searchParams)
+}
+
+export const getQuestionResponseAnalysis = async (searchParams: TestResponseStatisticsQueryParams) => {
+    return get(`${statisticsEndpoint}/test-responses/question-responses-analysis`, searchParams)
 }
