@@ -21,7 +21,7 @@ export default function SchoolManagerSidebar({ itemClasses, subLinkStyle, mainLi
             >
                 <AccordionItem key="1" aria-label="Manage Accounts" title="Quản lý tài khoản">
                     <div className='flex flex-col'>
-                        <Link href='/' className={subLinkStyle}>Tạo tài khoản mới</Link>
+                        <Link href='/accounts/create' className={subLinkStyle}>Tạo tài khoản mới</Link>
                         <Link href='/accounts/students' className={subLinkStyle}>Học sinh</Link>
                     </div>
                 </AccordionItem>
@@ -34,7 +34,7 @@ export default function SchoolManagerSidebar({ itemClasses, subLinkStyle, mainLi
                 </AccordionItem>
                 <AccordionItem key="3" aria-label="Manage Supporting Programs" title="Quản lý chương trình hỗ trợ">
                     <div className='flex flex-col'>
-                        <Link href='/' className={subLinkStyle}>Tạo chương trình mới</Link>
+                        <Link href='/supporting-programs/create' className={subLinkStyle}>Tạo chương trình mới</Link>
                         <Link href='/supporting-programs' className={subLinkStyle}>Xem tất cả chương trình</Link>
                     </div>
                 </AccordionItem>

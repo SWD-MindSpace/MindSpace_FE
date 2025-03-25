@@ -18,3 +18,11 @@ export const ACCOUNT_CENTER_COLUMNS = [
     'actions'
 ]
 
+export const ROLE_ID = {
+    STUDENT: 1,
+    ADMIN: 2,
+    PSYCHOLOGIST: 3,
+    SCHOOL_MANAGER: 4,
+    PARENT: 5
+}
+

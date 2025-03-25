@@ -1,7 +1,6 @@
 // Create functions to call APIs from BE
-import axios from 'axios';
+import axiosInstance from '@/lib/interceptor';
 
-const baseUrlBlog = 'https://localhost:7096/api/v1/resources/blogs'
 
 export type BlogQueryParams = {
     Type?: string,
@@ -31,19 +30,131 @@ export const getAllBlogs = async (searchParams: BlogQueryParams) => {
         }, {} as Record<string, string>)
     ).toString()
 
-    const url = queryString ? `${baseUrlBlog}?${queryString}` : `${baseUrlBlog}`
+    const url = queryString ? `/api/v1/resources/blogs?${queryString}` : `/api/v1/resources/blogs`
 
     try {
-        // call API
-        const response = await axios.get(url)
+        const response = await axiosInstance.get(`${url}`, {
+            headers: {
+                requiresAuth: false
+            }
+        })
 
-        const blogData = response?.data
+        return {status: 'success', data: response.data}
+    } catch (error) {
+        console.log(error)
+        
+        return {status: 'error', error: 'Xảy ra lỗi'}
+    }
 
-        return { status: 'success', data: blogData }
+}
+
+
+export const getBlogById = async (id: number) => {
+
+    try {
+        const response = await axiosInstance.get(`/api/v1/resources/blogs/${id}`, {
+            headers: {
+                requiresAuth: true
+            }
+        })
+
+        return {status: 'success', data: response.data}
+    } catch (error) {
+        console.log(error)
+        
+        return {status: 'error', error: 'Xảy ra lỗi'}
+    }
+
+}
+
+
+export const createManualForm = async (blogDraftId: string) => {
+
+    try {
+
+        const response = await axiosInstance.post('/api/v1/resources/blogs', {blogDraftId}, {
+            headers: {
+                requiresAuth: true
+            }
+        }) 
+
+        const locationUrl = response.headers.get('Location')
+
+        if (!locationUrl) throw new Error('Location header not found')
+
+        const blogResponseId = locationUrl.split('/').pop()
+
+        if (!blogResponseId) throw new Error('Invalid response location')
+
+        return {status: 'success', data: blogResponseId}
 
     } catch (error) {
         console.log(error)
 
-        return { status: 'error', error: 'Xảy ra lỗi' }
+        const errorMessage = typeof(error) === 'string' ? error.message : 'Xảy ra lỗi'
+
+        return {status: 'error', error: errorMessage}
     }
+
+}
+
+
+
+// ==================================
+//             BLOG DRAFT
+// ==================================
+
+export const getBlogDraftById = async (id: string) => {
+
+    try {
+        const response = await axiosInstance.get(`/api/v1/blog-draft/${id}`, {
+            headers: {
+                requiresAuth: true
+            }
+        })
+
+        return {status: 'success', data: response.data}
+    } catch (error) {
+        console.log(error)
+        
+        return {status: 'error', error: 'Xảy ra lỗi'}
+    }
+
+}
+
+
+export const updateBlogDraft = async (updatedForm: BlogCreateForm) => {
+
+    try {
+        await axiosInstance.post(`/api/v1/blog-draft`, {updatedForm},
+        {
+            headers: {
+                requiresAuth: true
+            }
+        })
+
+    } catch (error) {
+        console.log(error)
+        
+        return {status: 'error', error: 'Xảy ra lỗi'}
+    }
+
+}
+
+
+export const deleteBlogDraftById = async (id: number) => {
+
+    try {
+        await axiosInstance.delete(`/api/v1/blog-draft/${id}`,{
+            headers: {
+                requiresAuth: true
+            }
+        })
+
+    } catch (error) {
+        console.log(error)
+        
+        return {status: 'error', error: 'Xảy ra lỗi'}
+    }
+
 }

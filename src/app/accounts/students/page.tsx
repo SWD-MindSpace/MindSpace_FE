@@ -12,9 +12,11 @@ import { getAllAccounts, AccountQueryParams, getAllStudents } from '@/features/a
 import ListActions from '@/components/list/ListActions'
 import ListLayout from '@/components/ListLayout'
 
+import { ROLE_ID } from '@/features/accounts/common/constants';
+
 const LIMIT = 12
 
-export default function ParentListPage() {
+export default function StudentListPage() {
     const [data, setData] = useState<AccountTableData[] | null>(null)
     const [totalPages, setTotalPages] = useState<number | null>(null)
     const [totalItems, setTotalItems] = useState<number | null>(null)
@@ -27,11 +29,10 @@ export default function ParentListPage() {
 
 
     const fetchData = async () => {
-        let params = Object.fromEntries(searchParams) as AccountQueryParams
-        params.RoleId = 1
-        params.SchoolId = schoolId
+        const params = Object.fromEntries(searchParams) as AccountQueryParams
+        params.RoleId = ROLE_ID.STUDENT
+        params.PageSize = LIMIT
 
-        // const result = await getAllAccounts(params)
         // sau nay xu ly duoc access token roi thi se dung ham duoi nay
         const result = await getAllStudents(params)
 

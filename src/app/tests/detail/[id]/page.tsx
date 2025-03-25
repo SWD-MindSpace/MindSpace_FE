@@ -9,11 +9,11 @@ import { Textarea } from "@heroui/input";
 import { useDisclosure } from '@heroui/react';
 import { toast } from "react-toastify";
 import DetailedQuestionModal from "@/features/tests/components/DetailedQuestionModal";
+import { getQuestionById } from "@/features/questions/APIs";
 import { Question } from "../../create/page";
 import { DateRangePicker } from '@/components/dashboard/DateRangePicker';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import TestResponseStatistics from "@/features/tests/components/TestResponsesStatistics";
-
 
 
 export default function TestDetailPage() {
@@ -73,22 +73,18 @@ export default function TestDetailPage() {
     }
 
 
-    const fetchSelectedQuestion = async (isNewQuestion: any, id: any) => {
+const fetchSelectedQuestion = async (id: number) => {
 
-        if (isNewQuestion) {
-            const foundQuestion = form?.questionItems.find((question) => question.id === id)
-            setSelectedQuestion(foundQuestion)
+        // existing questions in db
+        const result = await getQuestionById(id)
 
-        } else { // existing questions in db
-            const result = await getQuestionById(id)
-
-            if (result.status === 'success') {
-                setSelectedQuestion(result.data)
-            } else {
-                setSelectedQuestion(null)
-                toast.error(result?.error)
-            }
+        if (result.status === 'success') {
+            setSelectedQuestion(result.data)
+        } else {
+            setSelectedQuestion(null)
+            toast.error(result?.error)
         }
+
     }
 
     const handleCloseQuestion = () => {
@@ -251,6 +247,7 @@ export default function TestDetailPage() {
                                                     variant="bordered"
                                                     size="lg"
                                                     classNames={questionInFormStyles}
+                                                    onClick={() => fetchSelectedQuestion(item.id)}
                                                 />
                                             </div>
                                         ))}
@@ -265,7 +262,14 @@ export default function TestDetailPage() {
             )}
 
 
-
+            {selectedQuestion &&
+                <DetailedQuestionModal
+                    selectedQuestion={selectedQuestion}
+                    isOpen={true}
+                    onOpenChange={onOpenChange}
+                    onCloseQuestion={handleCloseQuestion}
+                />
+            }
 
         </>
     )

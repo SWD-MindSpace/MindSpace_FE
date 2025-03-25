@@ -1,9 +1,7 @@
-// Create functions to call APIs from BE
-import axios from 'axios';
+import axiosInstance from '@/lib/interceptor';
+import { get } from '../../../../lib/apiCaller';
 import { TestCreateForm } from '../schemas/testCreateFormSchema';
-import { get } from '@/lib/apiCaller';
 
-const baseUrlTest = 'https://localhost:7096/api/v1/tests'
 
 export type TestQueryParams = {
     Title?: string,
@@ -40,30 +38,34 @@ export const getAllTests = async (searchParams: TestQueryParams) => {
         }, {} as Record<string, string>)
     ).toString()
 
-    const url = queryString ? `${baseUrlTest}?${queryString}` : `${baseUrlTest}`
+    const url = queryString ? `/api/v1/tests?${queryString}` : `/api/v1/tests`
 
     try {
-        // call API
-        const response = await axios.get(url)
+        const response = await axiosInstance.get(`${url}`, {
+            headers: {
+                requiresAuth: false
+            }
+        })
 
-        const testData = response?.data
-
-        return { status: 'success', data: testData }
-
+        return {status: 'success', data: response.data}
     } catch (error) {
         console.log(error)
-
-        return { status: 'error', error: 'Xảy ra lỗi' }
+        
+        return {status: 'error', error: 'Xảy ra lỗi'}
     }
+
 }
 
 
 export const createManualForm = async (testDraftId: string) => {
-    const url = `${baseUrlTest}/manual`
 
     try {
 
-        const response = await axios.post(url, { testDraftId: testDraftId })
+        const response = await axiosInstance.post('/api/v1/manual', {testDraftId}, {
+            headers: {
+                requiresAuth: true
+            }
+        }) 
 
         const locationUrl = response.headers.get('Location')
 
@@ -73,29 +75,32 @@ export const createManualForm = async (testDraftId: string) => {
 
         if (!testResponseId) throw new Error('Invalid response location')
 
-        return { status: 'success', data: testResponseId }
+        return {status: 'success', data: testResponseId}
 
     } catch (error) {
         console.log(error)
 
-        const errorMessage = typeof (error) === 'string' ? error.message : 'Xảy ra lỗi'
+        const errorMessage = typeof(error) === 'string' ? error.message : 'Xảy ra lỗi'
 
-        return { status: 'error', error: errorMessage }
+        return {status: 'error', error: errorMessage}
     }
 
 }
 
 export const getTestById = async (id: number) => {
-    const url = `https://localhost:7096/api/v1/tests/${id}`
 
     try {
-        const response = await axios.get(url)
+        const response = await axiosInstance.get(`/api/v1/tests/${id}`, {
+            headers: {
+                requiresAuth: true
+            }
+        })
 
-        return { status: 'success', data: response.data }
+        return {status: 'success', data: response.data}
     } catch (error) {
         console.log(error)
-
-        return { status: 'error', error: 'Xảy ra lỗi' }
+        
+        return {status: 'error', error: 'Xảy ra lỗi'}
     }
 }
 
@@ -105,49 +110,60 @@ export const getTestById = async (id: number) => {
 // ==================================
 
 export const getTestDraftById = async (id: string) => {
-    const url = `https://localhost:7096/api/v1/testdraft/${id}`
 
     try {
-        const response = await axios.get(url)
+        const response = await axiosInstance.get(`/api/v1/testdraft/${id}`, {
+            headers: {
+                requiresAuth: true
+            }
+        })
 
-        return { status: 'success', data: response.data }
+        return {status: 'success', data: response.data}
     } catch (error) {
         console.log(error)
-
-        return { status: 'error', error: 'Xảy ra lỗi' }
+        
+        return {status: 'error', error: 'Xảy ra lỗi'}
     }
+
 }
 
 
 export const updateTestDraft = async (updatedForm: TestCreateForm) => {
-    const url = 'https://localhost:7096/api/v1/testdraft'
 
     try {
-
-        await axios.post(url, updatedForm)
+        await axiosInstance.post(`/api/v1/testdraft`, {updatedForm},
+        {
+            headers: {
+                requiresAuth: true
+            }
+        })
 
     } catch (error) {
         console.log(error)
-
-        return { status: 'error', error: 'Xảy ra lỗi' }
+        
+        return {status: 'error', error: 'Xảy ra lỗi'}
     }
+
 }
 
 
 export const deleteTestDraftById = async (id: number) => {
 
-    const url = `https://localhost:7096/api/v1/testdraft/${id}`
-
     try {
-
-        await axios.delete(url)
+        await axiosInstance.delete(`/api/v1/testdraft/${id}`,{
+            headers: {
+                requiresAuth: true
+            }
+        })
 
     } catch (error) {
         console.log(error)
-
-        return { status: 'error', error: 'Xảy ra lỗi' }
+        
+        return {status: 'error', error: 'Xảy ra lỗi'}
     }
+
 }
+
 
 // Test response Statistics
 export type TestResponseStatisticsQueryParams = {

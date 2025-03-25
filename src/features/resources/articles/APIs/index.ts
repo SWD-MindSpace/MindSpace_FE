@@ -1,5 +1,6 @@
 // Create functions to call APIs from BE
 import axios from 'axios';
+import axiosInstance from '@/lib/interceptor';
 
 const baseUrlArticle = 'https://localhost:7096/api/v1/resources/articles'
 
@@ -12,6 +13,7 @@ export type ArticleQueryParams = {
     PageIndex?: number,
     PageSize?: number
 }
+
 
 export const getAllArticles = async (searchParams: ArticleQueryParams) => {
 
@@ -31,15 +33,62 @@ export const getAllArticles = async (searchParams: ArticleQueryParams) => {
         }, {} as Record<string, string>)
     ).toString()
 
-    const url = queryString ? `${baseUrlArticle}?${queryString}` : `${baseUrlArticle}`
+    const url = queryString ? `/api/v1/resources/articles?${queryString}` : `/api/v1/resources/articles`
+
+    try {
+        const response = await axiosInstance.get(`${url}`, {
+            headers: {
+                requiresAuth: false
+            }
+        })
+
+        return {status: 'success', data: response.data}
+    } catch (error) {
+        console.log(error)
+        
+        return {status: 'error', error: 'Xảy ra lỗi'}
+    }
+}
+
+
+export const getArticleById = async (id: number) => {
+
+    try {
+        const response = await axiosInstance.get(`/api/v1/resources/articles/${id}`, {
+            headers: {
+                requiresAuth: true
+            }
+        })
+
+        return {status: 'success', data: response.data}
+    } catch (error) {
+        console.log(error)
+        
+        return {status: 'error', error: 'Xảy ra lỗi'}
+    }
+}
+
+
+
+export const createNewArticle = async (newArticle: any) => {
 
     try {
         // call API
-        const response = await axios.get(url)
+        const response = await axiosInstance.post('/api/v1/resources/articles', newArticle, {
+            headers: {
+                requiresAuth: true
+            }
+        }) 
 
-        const articleData = response?.data
+        const locationUrl = response.headers.get('Location')
 
-        return { status: 'success', data: articleData }
+        if (!locationUrl) throw new Error('Location header not found')
+
+        const articleResponseId = locationUrl.split('/').pop()
+
+        if (!articleResponseId) throw new Error('Invalid response location')
+
+        return {status: 'success', data: articleResponseId}
 
     } catch (error) {
         console.log(error)
