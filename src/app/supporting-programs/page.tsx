@@ -62,9 +62,6 @@ export default function SupportingProgramListPage() {
         router.replace(`${pathname}?${params.toString()}`);
     }, 300)
 
-    const formatDate = (date: string) => {
-        return format(parse(date, "yyyy-MM-dd'T'HH:mm:ss", new Date()), 'dd/MM/yyyy HH:mm')
-    }
 
     const renderCell = useCallback((articleTableData: SupportingProgramTableData, columnKey: React.Key) => {
         const cellValue = articleTableData[columnKey as keyof SupportingProgramTableData]
@@ -85,9 +82,9 @@ export default function SupportingProgramListPage() {
             case "postalCode":
                 return <div>{cellValue as string}</div>
             case "startDateAt":
-                return <div>{formatDate(cellValue as string)}</div>
+                return <div>{cellValue as string}</div>
             case "isActive":
-                return <div>{cellValue == true ? "Hiện" : "Ẩn"}</div>
+                return <div>{cellValue == true ? "Đang hoạt động" : "Ngưng hoạt động"}</div>
             case "actions":
                 return <ListActions />
         }

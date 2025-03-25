@@ -1,18 +1,18 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { Button, useDisclosure } from '@heroui/react';
-import { getAllQuestions, getQuestionById } from '@/features/questions/APIs';
-import { toast } from 'react-toastify'
 import { useSearchParams, useRouter, usePathname } from 'next/navigation'
-import CreateTestForm from '@/features/tests/components/CreateTestForm';
-import QuestionBank from '@/features/tests/components/QuestionBank';
-import DetailedQuestionModal from '@/features/tests/components/DetailedQuestionModal';
-import { v4 as uuidv4 } from 'uuid';
+import { getAllQuestions, getQuestionById } from '@/features/questions/APIs';
 import { deleteTestDraftById, getTestDraftById, updateTestDraft, createManualForm } from '@/features/tests/APIs';
 import { useDebouncedCallback } from 'use-debounce';
-import { TestCreateForm as TestCreatedForm } from '@/features/tests/schemas/testCreateFormSchema';
+import { v4 as uuidv4 } from 'uuid';
+import { Button, useDisclosure } from '@heroui/react';
+import { toast } from 'react-toastify'
 import NewQuestionModal from '@/features/tests/components/NewQuestionModal';
+import DetailedQuestionModal from '@/features/tests/components/DetailedQuestionModal';
+import QuestionBank from '@/features/tests/components/QuestionBank';
+import CreateTestForm from '@/features/tests/components/CreateTestForm';
+import { TestCreateForm as TestCreatedForm } from '@/features/tests/schemas/testCreateFormSchema';
 
 
 type QuestionOption = {
@@ -30,7 +30,7 @@ export type Question = {
 
 const LIMIT = 10
 
-export default function TestCreateForm() {
+export default function TestCreatePage() {
     const [questionBank, setQuestionBank] = useState<Question[] | null>(null)
     const [filteredQuestionBank, setFilteredQuestionBank] = useState<Question[] | null>(null)
     const [totalPages, setTotalPages] = useState<number | null>(null)   // pagination for question bank
@@ -141,7 +141,7 @@ export default function TestCreateForm() {
 
     const getInitialTestDraftData = async () => {   // initial form can be a brand new OR incomplete form
 
-        let testDraft = localStorage.getItem('testDraft')
+        const testDraft = localStorage.getItem('testDraft')
 
         let testDraftId = ''
 
@@ -324,15 +324,19 @@ export default function TestCreateForm() {
 
 
                 {/* ADD NEW QUESTIONS SECTION */}
-                <div className='h-1/6 w-full flex flex-row gap-x-5'>
-                    <Button className='bg-primary-blue text-white flex-1 h-12 w-full'>Tải câu hỏi lên form</Button>
-                    <Button
-                        className='bg-primary-blue text-white flex-1 h-12'
-                        onPress={openNewQuestionModal}
-                    >
-                        Thêm câu hỏi mới vào form
-                    </Button>
-                </div>
+                {form && (
+                    <div className='h-1/6 w-full flex flex-row gap-x-5'>
+                        {/* <Button className='bg-primary-blue text-white flex-1 h-12 w-full'>Tải câu hỏi lên form</Button> */}
+                        <Button
+                            className='bg-primary-blue text-white flex-1 h-12'
+                            onPress={openNewQuestionModal}
+                        >
+                            Thêm câu hỏi mới vào form
+                        </Button>
+                    </div>
+                )
+                }
+
 
                 {isAddingNewQuestion &&
                     <NewQuestionModal

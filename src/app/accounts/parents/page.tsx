@@ -7,6 +7,7 @@ import { useDebouncedCallback } from 'use-debounce';
 import { toast } from 'react-toastify'
 import { truncateText } from '@/lib/utils'
 import { AccountTableData } from '@/features/accounts/common/schemas/AccountTableSchema'
+import { ROLE_ID } from '@/features/accounts/common/constants';
 
 import { getAllAccounts, AccountQueryParams } from '@/features/accounts/common/APIs'
 import ListActions from '@/components/list/ListActions'
@@ -26,7 +27,7 @@ export default function ParentListPage() {
 
     const fetchData = async () => {
         let params = Object.fromEntries(searchParams) as AccountQueryParams
-        params.RoleId = 5
+        params.RoleId = ROLE_ID.PARENT
         const result = await getAllAccounts(params)
 
         if (result.status === 'success') {

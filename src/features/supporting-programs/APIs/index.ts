@@ -1,7 +1,6 @@
 // Create functions to call APIs from BE
-import axios from 'axios';
+import axiosInstance from '@/lib/interceptor';
 
-const baseUrlSupportingPrograms = 'https://localhost:7096/api/v1/supporting-programs'
 
 export type SupportingProgramQueryParams = {
     MinQuantity?: number,
@@ -36,19 +35,66 @@ export const getAllSupportingPrograms = async (searchParams: SupportingProgramQu
         }, {} as Record<string, string>)
     ).toString()
 
-    const url = queryString ? `${baseUrlSupportingPrograms}?${queryString}` : `${baseUrlSupportingPrograms}`
+    const url = queryString ? `/api/v1/supporting-programs?${queryString}` : `/api/v1/supporting-programs`
+
+    try {
+        const response = await axiosInstance.get(`${url}`, {
+            headers: {
+                requiresAuth: false
+            }
+        })
+
+        return {status: 'success', data: response.data}
+    } catch (error) {
+        console.log(error)
+        
+        return {status: 'error', error: 'Xảy ra lỗi'}
+    }
+
+}
+
+
+export const createNewSupportingProgram = async (newSupportingProgram: any) => {
 
     try {
         // call API
-        const response = await axios.get(url)
+        const response = await axiosInstance.post('/api/v1/supporting-programs', newSupportingProgram, {
+            headers: {
+                requiresAuth: true
+            }
+        }) 
 
-        const supportingProgramData = response?.data
+        const locationUrl = response.headers.get('Location')
 
-        return { status: 'success', data: supportingProgramData }
+        if (!locationUrl) throw new Error('Location header not found')
+
+        const newProgramResponseId = locationUrl.split('/').pop()
+
+        if (!newProgramResponseId) throw new Error('Invalid response location')
+
+        return {status: 'success', data: newProgramResponseId}
 
     } catch (error) {
         console.log(error)
 
         return { status: 'error', error: 'Xảy ra lỗi' }
+    }
+} 
+
+
+export const getSupportingProgramById = async (id: number) => {
+
+    try {
+        const response = await axiosInstance.get(`/api/v1/supporting-programs/${id}`, {
+            headers: {
+                requiresAuth: true
+            }
+        })
+
+        return {status: 'success', data: response.data}
+    } catch (error) {
+        console.log(error)
+        
+        return {status: 'error', error: 'Xảy ra lỗi'}
     }
 }

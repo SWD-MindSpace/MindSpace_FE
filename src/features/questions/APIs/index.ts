@@ -1,7 +1,6 @@
 // Create functions to call APIs from BE
-import axios from 'axios';
+import axiosInstance from '@/lib/interceptor';
 
-const baseUrlQuestion = 'https://localhost:7096/api/v1/questions'
 
 export type QuestionQueryParams = {
     SearchQuestionContent?: string
@@ -10,6 +9,7 @@ export type QuestionQueryParams = {
     PageSize?: number
     IsOnlyGetQuestionsWithOptions?: boolean
 }
+
 
 export const getAllQuestions = async (searchParams?: QuestionQueryParams) => {
     
@@ -30,40 +30,39 @@ export const getAllQuestions = async (searchParams?: QuestionQueryParams) => {
         }, {} as Record<string, string>)
     ).toString()
     
-    const url = queryString ? `${baseUrlQuestion}?${queryString}` : `${baseUrlQuestion}`
+    const url = queryString ? `/api/v1/questions?${queryString}` : `/api/v1/questions`
     
     try {
-        // call API
-        const response = await axios.get(url)
+        const response = await axiosInstance.get(`${url}`, {
+            headers: {
+                requiresAuth: false
+            }
+        })
 
-        const questionData = response?.data
-
-        return {status: 'success', data: questionData}
-            
+        return {status: 'success', data: response.data}
     } catch (error) {
         console.log(error)
         
         return {status: 'error', error: 'Xảy ra lỗi'}
     }
+
 }
+
 
 export const getQuestionById = async (id: number) => {
 
-    const url = `${baseUrlQuestion}/${id}`
-
     try {
-        // call API
-        const response = await axios.get(url)
+        const response = await axiosInstance.get(`/api/v1/questions/${id}`, {
+            headers: {
+                requiresAuth: true
+            }
+        })
 
-        console.log(response)
-
-        const question = response?.data
-
-        return {status: 'success', data: question}
-            
+        return {status: 'success', data: response.data}
     } catch (error) {
         console.log(error)
         
         return {status: 'error', error: 'Xảy ra lỗi'}
     }
+
 }
