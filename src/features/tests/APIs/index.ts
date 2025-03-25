@@ -1,7 +1,6 @@
 import axiosInstance from '@/lib/interceptor';
-import { get } from '../../../../lib/apiCaller';
+import { get } from '@/lib/apiCaller';
 import { TestCreateForm } from '../schemas/testCreateFormSchema';
-
 
 export type TestQueryParams = {
     Title?: string,
@@ -47,11 +46,11 @@ export const getAllTests = async (searchParams: TestQueryParams) => {
             }
         })
 
-        return {status: 'success', data: response.data}
+        return { status: 'success', data: response.data }
     } catch (error) {
         console.log(error)
-        
-        return {status: 'error', error: 'Xảy ra lỗi'}
+
+        return { status: 'error', error: 'Xảy ra lỗi' }
     }
 
 }
@@ -61,11 +60,11 @@ export const createManualForm = async (testDraftId: string) => {
 
     try {
 
-        const response = await axiosInstance.post('/api/v1/manual', {testDraftId}, {
+        const response = await axiosInstance.post('/api/v1/tests/manual', { testDraftId }, {
             headers: {
                 requiresAuth: true
             }
-        }) 
+        })
 
         const locationUrl = response.headers.get('Location')
 
@@ -75,14 +74,14 @@ export const createManualForm = async (testDraftId: string) => {
 
         if (!testResponseId) throw new Error('Invalid response location')
 
-        return {status: 'success', data: testResponseId}
+        return { status: 'success', data: testResponseId }
 
     } catch (error) {
         console.log(error)
 
-        const errorMessage = typeof(error) === 'string' ? error.message : 'Xảy ra lỗi'
+        const errorMessage = typeof (error) === 'string' ? error.message : 'Xảy ra lỗi'
 
-        return {status: 'error', error: errorMessage}
+        return { status: 'error', error: errorMessage }
     }
 
 }
@@ -96,11 +95,11 @@ export const getTestById = async (id: number) => {
             }
         })
 
-        return {status: 'success', data: response.data}
+        return { status: 'success', data: response.data }
     } catch (error) {
         console.log(error)
-        
-        return {status: 'error', error: 'Xảy ra lỗi'}
+
+        return { status: 'error', error: 'Xảy ra lỗi' }
     }
 }
 
@@ -118,11 +117,11 @@ export const getTestDraftById = async (id: string) => {
             }
         })
 
-        return {status: 'success', data: response.data}
+        return { status: 'success', data: response.data }
     } catch (error) {
         console.log(error)
-        
-        return {status: 'error', error: 'Xảy ra lỗi'}
+
+        return { status: 'error', error: 'Xảy ra lỗi' }
     }
 
 }
@@ -131,17 +130,17 @@ export const getTestDraftById = async (id: string) => {
 export const updateTestDraft = async (updatedForm: TestCreateForm) => {
 
     try {
-        await axiosInstance.post(`/api/v1/testdraft`, {updatedForm},
-        {
-            headers: {
-                requiresAuth: true
-            }
-        })
+        await axiosInstance.post(`/api/v1/testdraft`, updatedForm,
+            {
+                headers: {
+                    requiresAuth: true
+                }
+            })
 
     } catch (error) {
         console.log(error)
-        
-        return {status: 'error', error: 'Xảy ra lỗi'}
+
+        return { status: 'error', error: 'Xảy ra lỗi' }
     }
 
 }
@@ -150,7 +149,7 @@ export const updateTestDraft = async (updatedForm: TestCreateForm) => {
 export const deleteTestDraftById = async (id: number) => {
 
     try {
-        await axiosInstance.delete(`/api/v1/testdraft/${id}`,{
+        await axiosInstance.delete(`/api/v1/testdraft/${id}`, {
             headers: {
                 requiresAuth: true
             }
@@ -158,8 +157,8 @@ export const deleteTestDraftById = async (id: number) => {
 
     } catch (error) {
         console.log(error)
-        
-        return {status: 'error', error: 'Xảy ra lỗi'}
+
+        return { status: 'error', error: 'Xảy ra lỗi' }
     }
 
 }
@@ -172,7 +171,7 @@ export type TestResponseStatisticsQueryParams = {
     StartDate?: string,
     EndDate?: string,
 }
-const statisticsEndpoint = '/statistics';
+const statisticsEndpoint = '/api/v1/statistics';
 export const getScoreRankAnalysis = async (searchParams: TestResponseStatisticsQueryParams) => {
     return get(`${statisticsEndpoint}/test-responses/score-rank-analysis`, searchParams)
 }

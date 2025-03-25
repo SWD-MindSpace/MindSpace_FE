@@ -20,7 +20,7 @@ export const request = (
     const token = localStorage.getItem('access_token');
     const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
     return axios({
-        url: process.env.NEXT_PUBLIC_API_URL + endpoint,
+        url: process.env.NEXT_PUBLIC_API_BASE_URL + endpoint,
         method: method,
         headers: Object.assign({}, headers, authHeaders),
         params: Object.assign(params),

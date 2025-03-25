@@ -39,11 +39,11 @@ export const getAllBlogs = async (searchParams: BlogQueryParams) => {
             }
         })
 
-        return {status: 'success', data: response.data}
+        return { status: 'success', data: response.data }
     } catch (error) {
         console.log(error)
-        
-        return {status: 'error', error: 'Xảy ra lỗi'}
+
+        return { status: 'error', error: 'Xảy ra lỗi' }
     }
 
 }
@@ -58,11 +58,11 @@ export const getBlogById = async (id: number) => {
             }
         })
 
-        return {status: 'success', data: response.data}
+        return { status: 'success', data: response.data }
     } catch (error) {
         console.log(error)
-        
-        return {status: 'error', error: 'Xảy ra lỗi'}
+
+        return { status: 'error', error: 'Xảy ra lỗi' }
     }
 
 }
@@ -72,11 +72,11 @@ export const createManualForm = async (blogDraftId: string) => {
 
     try {
 
-        const response = await axiosInstance.post('/api/v1/resources/blogs', {blogDraftId}, {
+        const response = await axiosInstance.post('/api/v1/resources/blogs', { blogDraftId }, {
             headers: {
                 requiresAuth: true
             }
-        }) 
+        })
 
         const locationUrl = response.headers.get('Location')
 
@@ -86,14 +86,14 @@ export const createManualForm = async (blogDraftId: string) => {
 
         if (!blogResponseId) throw new Error('Invalid response location')
 
-        return {status: 'success', data: blogResponseId}
+        return { status: 'success', data: blogResponseId }
 
     } catch (error) {
         console.log(error)
 
-        const errorMessage = typeof(error) === 'string' ? error.message : 'Xảy ra lỗi'
+        const errorMessage = typeof (error) === 'string' ? error.message : 'Xảy ra lỗi'
 
-        return {status: 'error', error: errorMessage}
+        return { status: 'error', error: errorMessage }
     }
 
 }
@@ -113,11 +113,11 @@ export const getBlogDraftById = async (id: string) => {
             }
         })
 
-        return {status: 'success', data: response.data}
+        return { status: 'success', data: response.data }
     } catch (error) {
         console.log(error)
-        
-        return {status: 'error', error: 'Xảy ra lỗi'}
+
+        return { status: 'error', error: 'Xảy ra lỗi' }
     }
 
 }
@@ -126,17 +126,17 @@ export const getBlogDraftById = async (id: string) => {
 export const updateBlogDraft = async (updatedForm: BlogCreateForm) => {
 
     try {
-        await axiosInstance.post(`/api/v1/blog-draft`, {updatedForm},
-        {
-            headers: {
-                requiresAuth: true
-            }
-        })
+        await axiosInstance.post(`/api/v1/blog-draft`, updatedForm,
+            {
+                headers: {
+                    requiresAuth: true
+                }
+            })
 
     } catch (error) {
         console.log(error)
-        
-        return {status: 'error', error: 'Xảy ra lỗi'}
+
+        return { status: 'error', error: 'Xảy ra lỗi' }
     }
 
 }
@@ -145,7 +145,7 @@ export const updateBlogDraft = async (updatedForm: BlogCreateForm) => {
 export const deleteBlogDraftById = async (id: number) => {
 
     try {
-        await axiosInstance.delete(`/api/v1/blog-draft/${id}`,{
+        await axiosInstance.delete(`/api/v1/blog-draft/${id}`, {
             headers: {
                 requiresAuth: true
             }
@@ -153,8 +153,8 @@ export const deleteBlogDraftById = async (id: number) => {
 
     } catch (error) {
         console.log(error)
-        
-        return {status: 'error', error: 'Xảy ra lỗi'}
+
+        return { status: 'error', error: 'Xảy ra lỗi' }
     }
 
 }
