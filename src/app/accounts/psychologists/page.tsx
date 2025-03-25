@@ -12,6 +12,8 @@ import { getAllAccounts, AccountQueryParams } from '@/features/accounts/common/A
 import ListActions from '@/components/list/ListActions'
 import ListLayout from '@/components/ListLayout'
 
+import { ROLE_ID } from '@/features/accounts/common/constants';
+
 const LIMIT = 12
 
 export default function PsychologistListPage() {
@@ -26,7 +28,7 @@ export default function PsychologistListPage() {
 
     const fetchData = async () => {
         let params = Object.fromEntries(searchParams) as AccountQueryParams
-        params.RoleId = 3
+        params.RoleId = ROLE_ID.PSYCHOLOGIST
         const result = await getAllAccounts(params)
 
         if (result.status === 'success') {

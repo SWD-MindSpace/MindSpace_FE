@@ -1,8 +1,7 @@
 // Create functions to call APIs from BE
-import axios from 'axios';
+import { ROLE_ID } from '../constants';
+import axiosInstance from '@/lib/interceptor';
 
-const baseUrlAccounts = 'https://localhost:7096/api/v1/identities/accounts'
-const baseUrlStudents = "https://localhost:7096/api/v1/identities/accounts/students"
 
 export type AccountQueryParams = {
     SearchName?: string,
@@ -19,7 +18,7 @@ const getQueryString = (searchParams: AccountQueryParams) => {
     // append PageSize to params obj
     searchParams = {
         ...searchParams,
-        PageSize: 12
+        PageSize: searchParams.PageSize ? Number(searchParams.PageSize) : 12,
     }
 
     // Convert to type Record<string,string> -> Convert to a query string
@@ -33,35 +32,100 @@ const getQueryString = (searchParams: AccountQueryParams) => {
     ).toString();
     return queryString
 }
-const getAllEntities = async (url: string) => {
+
+
+export const getAllAccounts = async (searchParams: AccountQueryParams) => {
+    const queryString = getQueryString(searchParams)
 
     try {
-        // call API
-        const response = await axios.get(url)
 
-        const responseData = response?.data
+        const response = await axiosInstance.get(`/api/v1/identities/accounts?${queryString}`, {
+            headers: {
+                requiresAuth: true
+            }
+        })    
 
-        return { status: 'success', data: responseData }
+        console.log(response)
+
+        return { status: 'success', data: response.data }
 
     } catch (error) {
+
         console.log(error)
 
         return { status: 'error', error: 'Xảy ra lỗi' }
     }
 }
 
-const getUrl = (queryString: string, baseUrl: string) => {
-    return queryString ? `${baseUrl}?${queryString}` : `${baseUrl}`
-}
-
-export const getAllAccounts = async (searchParams: AccountQueryParams) => {
-    const queryString = getQueryString(searchParams)
-    const url = getUrl(queryString, baseUrlAccounts)
-    return getAllEntities(url);
-}
 
 export const getAllStudents = async (searchParams: AccountQueryParams) => {
     const queryString = getQueryString(searchParams)
-    const url = getUrl(queryString, baseUrlStudents)
-    return getAllEntities(url);
+
+    try {
+
+        const response = await axiosInstance.get(`/api/v1/identities/accounts?${queryString}`, {
+            headers: {
+                requiresAuth: true
+            }
+        })    
+
+        console.log(response)
+
+        return { status: 'success', data: response.data }
+
+    } catch (error) {
+
+        console.log(error)
+
+        return { status: 'error', error: 'Xảy ra lỗi' }
+    }
+}
+
+
+export const getAllPsychologists = async () => {
+    const searchParams = {
+        RoleId: ROLE_ID.PSYCHOLOGIST,
+        PageSize: 1000,
+    }
+
+    const queryString = getQueryString(searchParams)
+    
+    try {
+
+        const response = await axiosInstance.get(`/api/v1/identities/accounts?${queryString}`, {
+            headers: {
+                requiresAuth: true
+            }
+        })    
+
+        return { status: 'success', data: response.data.data }
+
+    } catch (error) {
+
+        console.log(error)
+
+        return { status: 'error', error: 'Xảy ra lỗi' }
+    }
+}
+
+
+export const createNewAccountByImport = async (roleName, formData) => {
+
+    try {
+
+        const response = await axiosInstance.post(`/api/v1/identities/register-for/${roleName}`, formData, {
+            headers: {
+                requiresAuth: true,
+                "Content-Type": "multipart/form-data" 
+            }
+        })    
+
+        return { status: 'success', data: response.data }
+
+    } catch (error) {
+
+        console.log(error)
+
+        return { status: 'error', error: 'Xảy ra lỗi' }
+    }
 }

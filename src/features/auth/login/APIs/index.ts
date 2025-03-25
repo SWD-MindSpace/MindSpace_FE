@@ -1,19 +1,22 @@
-import axios from 'axios';
+import axiosInstance from '@/lib/interceptor';
 import { LoginSchema } from './../schemas/loginSchema';
 import { Base64 } from 'js-base64';
 
 
-const baseUrl = 'https://localhost:7096/api/v1/identities'
-
 export async function login({ email, password }: LoginSchema) {
-    const url = `${baseUrl}/login`
+    
     const payload = {
         email,
         password
     }
+
     try {
         // call API
-        const response = await axios.post(url, payload)
+        const response = await axiosInstance.post('/api/v1/identities/login', payload, {
+            headers: {
+                requiresAuth: false
+            }
+        }) 
 
         const { id_token, access_token, refresh_token } = response.data
 
@@ -33,6 +36,10 @@ export async function login({ email, password }: LoginSchema) {
             localStorage.setItem('userInfo', JSON.stringify(userInfo))
             localStorage.setItem('access_token', access_token)
             localStorage.setItem('refresh_token', refresh_token)
+            const testDraft = localStorage.getItem('testDraft')
+            const blogDraft = localStorage.getItem('blogDraft')
+            if (testDraft) localStorage.removeItem('testDraft')
+            if (blogDraft) localStorage.removeItem('blogDraft')
 
             return { status: 'success', data: role }
 
