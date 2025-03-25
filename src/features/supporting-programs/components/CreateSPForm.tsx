@@ -17,7 +17,7 @@ export default function CreateSPForm({
 }) {
 
     const cloudPresetName = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME;
-    
+
 
     const [pdf, setPdf] = useState('')
 
@@ -116,7 +116,7 @@ export default function CreateSPForm({
                             radius='sm'
                             size='lg'
                             id="title"
-                            placeholder="Nhập tiêu đề bài báo"
+                            placeholder="Nhập tiêu đề chương trình"
                             type='text'
                             isRequired
                             errorMessage={'Không được bỏ trống tiêu đề'}
