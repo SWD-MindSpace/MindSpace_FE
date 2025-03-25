@@ -1,7 +1,7 @@
 // Create functions to call APIs from BE
 import { get } from '../../../lib/apiCaller';
 
-const statisticsEndpoint = '/statistics';
+const statisticsEndpoint = '/api/v1/statistics';
 
 export type StatisticsQueryParams = {
     SchoolId?: number,
