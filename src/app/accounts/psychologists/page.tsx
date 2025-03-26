@@ -8,7 +8,7 @@ import { toast } from 'react-toastify'
 import { truncateText } from '@/lib/utils'
 import { AccountTableData } from '@/features/accounts/common/schemas/AccountTableSchema'
 
-import { getAllAccounts, AccountQueryParams } from '@/features/accounts/common/APIs'
+import { getAllAccounts, AccountQueryParams, getAllPsychologists } from '@/features/accounts/common/APIs'
 import ListActions from '@/components/list/ListActions'
 import ListLayout from '@/components/ListLayout'
 
@@ -29,7 +29,7 @@ export default function PsychologistListPage() {
     const fetchData = async () => {
         let params = Object.fromEntries(searchParams) as AccountQueryParams
         params.RoleId = ROLE_ID.PSYCHOLOGIST
-        const result = await getAllAccounts(params)
+        const result = await getAllPsychologists(params)
 
         if (result.status === 'success') {
             const { data, count } = result.data

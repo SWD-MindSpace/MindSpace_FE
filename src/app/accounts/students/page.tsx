@@ -32,10 +32,10 @@ export default function StudentListPage() {
         const params = Object.fromEntries(searchParams) as AccountQueryParams
         params.RoleId = ROLE_ID.STUDENT
         params.PageSize = LIMIT
+        params.SchoolId = schoolId
 
         // sau nay xu ly duoc access token roi thi se dung ham duoi nay
         const result = await getAllStudents(params)
-
         if (result.status === 'success') {
             const { data, count } = result.data
             if (count) {
