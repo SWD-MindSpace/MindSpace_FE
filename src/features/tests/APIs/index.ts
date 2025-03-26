@@ -1,5 +1,5 @@
 import axiosInstance from '@/lib/interceptor';
-import { get } from '@/lib/apiCaller';
+import { get } from '../../../lib/apiCaller';
 import { TestCreateForm } from '../schemas/testCreateFormSchema';
 
 export type TestQueryParams = {
@@ -60,13 +60,15 @@ export const createManualForm = async (testDraftId: string) => {
 
     try {
 
-        const response = await axiosInstance.post('/api/v1/tests/manual', { testDraftId }, {
+        const response = await axiosInstance.post('/api/v1/tests/manual', { testDraftId: testDraftId }, {
             headers: {
                 requiresAuth: true
             }
         })
 
         const locationUrl = response.headers.get('Location')
+
+        console.log(locationUrl)
 
         if (!locationUrl) throw new Error('Location header not found')
 

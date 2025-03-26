@@ -72,13 +72,15 @@ export const createManualForm = async (blogDraftId: string) => {
 
     try {
 
-        const response = await axiosInstance.post('/api/v1/resources/blogs', { blogDraftId }, {
+        const response = await axiosInstance.post('/api/v1/resources/blogs', { blogDraftId: blogDraftId}, {
             headers: {
                 requiresAuth: true
             }
         })
 
         const locationUrl = response.headers.get('Location')
+
+        console.log('locationUrl: ', locationUrl)
 
         if (!locationUrl) throw new Error('Location header not found')
 

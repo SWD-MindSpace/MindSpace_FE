@@ -19,7 +19,7 @@ export default function LoginForm() {
     const onSubmit = async (data: LoginSchema) => {
         const result = await login(data)
         if (result?.status === 'success') {
-            router.replace('/')
+            router.replace('/dashboard')
         } else {
             toast.error(result?.error)
         }
