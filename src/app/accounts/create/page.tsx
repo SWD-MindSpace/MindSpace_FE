@@ -5,18 +5,30 @@ import { toast } from 'react-toastify';
 import { createNewAccountByImport } from '@/features/accounts/common/APIs';
 import { Select, SelectItem } from "@heroui/select";
 import { ROLE_ID } from '@/features/accounts/common/constants';
+import { Button } from "@heroui/button";
+import { Card, CardHeader, CardBody } from "@heroui/card";
+import { redirect } from 'next/navigation'
+
 
 
 export default function CreateAccountPage() {
 
+    const role = JSON.parse(localStorage.getItem('userInfo')).role;
+
+    if (role !== 'Admin' && role !== 'SchoolManager') {
+        redirect('/login')
+    }
+
     const roleMenuForAdmin = [
-        { key: ROLE_ID.PSYCHOLOGIST, value: "psychologist", label: "Chuyên viên tâm lý" },
-        { key: ROLE_ID.SCHOOL_MANAGER, value: "manager", label: "Quản lý trường" },
+        { key: "psychologist", label: "Chuyên viên tâm lý" },
+        { key: "manager", label: "Quản lý trường" },
     ];
 
     const roleMenuForSchoolManager = [
-        { key: ROLE_ID.STUDENT, value: "student", label: "Học sinh" },
+        { key: "student", label: "Học sinh" },
     ]
+
+    const choosenRoleMenu = role === 'Admin' ? roleMenuForAdmin : roleMenuForSchoolManager;
 
 
     const [file, setFile] = useState(null); // Store the uploaded file
@@ -42,7 +54,8 @@ export default function CreateAccountPage() {
         const formData = new FormData();
         formData.append('file', file); // Append the file to the FormData object
 
-        const roleName = 'psychologist';
+        // Get the role name from the form
+        const roleName = e.target.role.value;
 
         // Call the API to upload the file
         const response = await createNewAccountByImport(roleName, formData);
@@ -57,22 +70,61 @@ export default function CreateAccountPage() {
 
     return (
         <>
-            <Select className="max-w-xs" label="Loại tài khoản" placeholder="Chọn loại tài khoản">
-                {roleMenuForAdmin.map((role) => (
-                    <SelectItem key={role.key} value={role.value}>{role.label}</SelectItem>
-                ))}
-            </Select>
+            <div>
+                <form className="w-[50%]" onSubmit={handleSubmit}>
+                    <Card
+                        className='h-full -z-0'
+                        radius='sm'
+                    >
 
-            <form className="flex flex-col" onSubmit={handleSubmit}>
-                <input
-                    type="file"
-                    accept=".xlsx, .xls"
-                    onChange={handleFileUpload} // Handle file selection
-                />
-                <button color="primary" type="submit">
-                    Upload
-                </button>
-            </form>
+                        <CardHeader className='text-white bg-primary-blue'>
+                            <div className='w-full text-center text-md font-semibold uppercase'>BÀI TEST MỚI</div>
+                        </CardHeader>
+
+                        <CardBody>
+                            <div className='flex flex-col gap-5 p-5'>
+
+                                <div className='flex flex-row justify-start items-center gap-5'>
+                                    <Select
+                                        label="Loại tài khoản"
+                                        placeholder="Chọn loại tài khoản"
+                                        name="role"
+                                    >
+                                        {choosenRoleMenu.map((role) => (
+                                            <SelectItem
+                                                key={role.key}
+                                                value={role.value}
+                                            >
+                                                {role.label}
+                                            </SelectItem>
+                                        ))}
+                                    </Select>
+
+
+                                    <input
+                                        type="file"
+                                        accept=".xlsx, .xls"
+                                        onChange={handleFileUpload} // Handle file selection
+                                    />
+                                </div>
+
+                                <Button
+                                    color="primary"
+                                    type="submit"
+                                    className='w-10'
+                                >
+                                    Lưu lại
+                                </Button>
+                            </div>
+                        </CardBody>
+
+                    </Card>
+
+
+
+                </form>
+            </div>
+
         </>
     );
 }

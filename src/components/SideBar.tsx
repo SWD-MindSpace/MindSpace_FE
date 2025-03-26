@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import AdminSidebar from './sidebar/AdminSidebar';
 import PsychologistSidebar from './sidebar/PsychologistSidebar';
 import SchoolManagerSidebar from './sidebar/SchoolManagerSidebar';
+import { redirect } from 'next/navigation'
 
 export default function SideBar() {
     const pathname = usePathname()
@@ -12,6 +13,14 @@ export default function SideBar() {
     const isLoginPage = pathname === '/login'
 
     if (isLoginPage) return
+
+    const isLoggedIn = localStorage.getItem('userInfo')
+
+    if (!isLoggedIn) {
+        redirect('/login')
+    }
+
+    const role = JSON.parse(localStorage.getItem('userInfo')).role;
 
     const itemClasses = {
         base: "py-0 w-full",
@@ -25,6 +34,16 @@ export default function SideBar() {
 
     const subLinkStyle = 'hover:bg-default-100 hover:text-primary-blue px-3 py-2 rounded-lg flex items-center'
 
+    let choosenSideBar = null
+
+    if (role === 'Admin') {
+        choosenSideBar = <AdminSidebar itemClasses={itemClasses} subLinkStyle={subLinkStyle} mainLinkStyle={mainLinkStyle} />
+    } else if (role === 'Psychologist') {
+        choosenSideBar = <PsychologistSidebar itemClasses={itemClasses} subLinkStyle={subLinkStyle} mainLinkStyle={mainLinkStyle} />
+    } else {
+        choosenSideBar = <SchoolManagerSidebar itemClasses={itemClasses} subLinkStyle={subLinkStyle} mainLinkStyle={mainLinkStyle} />
+    }
+
     return (
         <div className='sticky top-0 flex flex-col'>
             <div className='flex items-center justify-center h-16 border-b-1 mx-5'>
@@ -32,9 +51,7 @@ export default function SideBar() {
             </div>
 
             <div className='py-4'>
-                <AdminSidebar itemClasses={itemClasses} subLinkStyle={subLinkStyle} mainLinkStyle={mainLinkStyle} />
-                <PsychologistSidebar itemClasses={itemClasses} subLinkStyle={subLinkStyle} mainLinkStyle={mainLinkStyle} />
-                <SchoolManagerSidebar itemClasses={itemClasses} subLinkStyle={subLinkStyle} mainLinkStyle={mainLinkStyle} />
+                {choosenSideBar}
             </div>
         </div>
     )

@@ -14,7 +14,7 @@ export default function PsychologistSidebar({ itemClasses, subLinkStyle, mainLin
             <div className={mainLinkStyle}>
                 <Link href="/schedules">Xếp lịch làm việc</Link>
             </div>
-            <Accordion
+            {/* <Accordion
                 selectionMode="multiple"
                 itemClasses={itemClasses}
                 showDivider={false}
@@ -25,7 +25,7 @@ export default function PsychologistSidebar({ itemClasses, subLinkStyle, mainLin
                         <Link href='/' className={subLinkStyle}>Lịch sử lịch hẹn</Link>
                     </div>
                 </AccordionItem>
-            </Accordion>
+            </Accordion> */}
         </div>
     )
 }
