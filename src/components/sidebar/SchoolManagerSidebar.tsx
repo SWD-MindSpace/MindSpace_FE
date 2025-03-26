@@ -38,6 +38,18 @@ export default function SchoolManagerSidebar({ itemClasses, subLinkStyle, mainLi
                         <Link href='/supporting-programs' className={subLinkStyle}>Xem tất cả chương trình</Link>
                     </div>
                 </AccordionItem>
+                <AccordionItem key="4" aria-label="Manage Articles" title="Quản lý bài báo">
+                    <div className='flex flex-col'>
+                        <Link href='/resources/articles/create' className={subLinkStyle}>Tạo bài báo mới</Link>
+                        <Link href='/resources/articles' className={subLinkStyle}>Xem tất cả bài báo</Link>
+                    </div>
+                </AccordionItem>
+                <AccordionItem key="5" aria-label="Manage Blogs" title="Quản lý bài blog">
+                    <div className='flex flex-col'>
+                        <Link href='/resources/blogs/create' className={subLinkStyle}>Tạo bài đăng mới</Link>
+                        <Link href='/resources/blogs' className={subLinkStyle}>Xem tất cả bài blog</Link>
+                    </div>
+                </AccordionItem>
             </Accordion>
         </div>
     )
