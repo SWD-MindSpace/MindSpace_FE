@@ -1,7 +1,8 @@
 import axiosInstance from '@/lib/interceptor';
-import { get } from '@/lib/apiCaller';
+import { get, put } from '@/lib/apiCaller';
 import { TestCreateForm } from '../schemas/testCreateFormSchema';
 
+const testEndpoint = '/api/v1/tests';
 export type TestQueryParams = {
     Title?: string,
     TestCode?: string,
@@ -103,6 +104,9 @@ export const getTestById = async (id: number) => {
     }
 }
 
+export const toggleTestStatus = async (id: number) => {
+    return await put(`${testEndpoint}/${id}/toggle-status`)
+}
 
 // ==================================
 //             TEST DRAFT

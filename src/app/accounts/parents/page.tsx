@@ -102,7 +102,7 @@ export default function ParentListPage() {
                 return <ListActions id={accountData.id}
                     onToggleStatus={() => handleToggleStatus(accountData.id)} />
         }
-    }, [])
+    }, [handleToggleStatus])
 
     const searchBoxProps = {
         placeholder: 'Tìm kiếm tiêu đề',

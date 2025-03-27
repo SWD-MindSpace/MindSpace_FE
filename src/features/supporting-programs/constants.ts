@@ -6,8 +6,8 @@ export const SUPPORTING_PROGRAM_LIST_COLUMNS = [
     { name: "THÀNH PHỐ", uid: "city" },
     { name: "TỈNH", uid: "province" },
     { name: "MÃ BƯU CHÍNH", uid: "postalCode" },
-    { name: "TRẠNG THÁI", uid: "isActive" },
     { name: "NGÀY BẮT ĐẦU", uid: "startDateAt" },
+    { name: "TRẠNG THÁI", uid: "isActive" },
     { name: "THÊM", uid: "actions" },
 ];
 

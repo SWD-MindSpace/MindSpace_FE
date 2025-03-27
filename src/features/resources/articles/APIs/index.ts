@@ -42,11 +42,11 @@ export const getAllArticles = async (searchParams: ArticleQueryParams) => {
             }
         })
 
-        return {status: 'success', data: response.data}
+        return { status: 'success', data: response.data }
     } catch (error) {
         console.log(error)
-        
-        return {status: 'error', error: 'Xảy ra lỗi'}
+
+        return { status: 'error', error: 'Xảy ra lỗi' }
     }
 }
 
@@ -60,15 +60,13 @@ export const getArticleById = async (id: number) => {
             }
         })
 
-        return {status: 'success', data: response.data}
+        return { status: 'success', data: response.data }
     } catch (error) {
         console.log(error)
-        
-        return {status: 'error', error: 'Xảy ra lỗi'}
+
+        return { status: 'error', error: 'Xảy ra lỗi' }
     }
 }
-
-
 
 export const createNewArticle = async (newArticle: any) => {
 
@@ -78,7 +76,7 @@ export const createNewArticle = async (newArticle: any) => {
             headers: {
                 requiresAuth: true
             }
-        }) 
+        })
 
         const locationUrl = response.headers.get('Location')
 
@@ -88,7 +86,7 @@ export const createNewArticle = async (newArticle: any) => {
 
         if (!articleResponseId) throw new Error('Invalid response location')
 
-        return {status: 'success', data: articleResponseId}
+        return { status: 'success', data: articleResponseId }
 
     } catch (error) {
         console.log(error)
@@ -96,3 +94,4 @@ export const createNewArticle = async (newArticle: any) => {
         return { status: 'error', error: 'Xảy ra lỗi' }
     }
 }
+
