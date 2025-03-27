@@ -15,6 +15,7 @@ export const testSchema = z.object({
     }).optional(),
     targetUser: z.string(),
     description: z.string(),
+    testStatus: z.string(),
     questionCount: z.number(),
     price: z.number(),
     author: accountSchema

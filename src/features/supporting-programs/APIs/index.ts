@@ -1,4 +1,5 @@
 // Create functions to call APIs from BE
+import { put } from '@/lib/apiCaller';
 import axiosInstance from '@/lib/interceptor';
 
 
@@ -16,6 +17,8 @@ export type SupportingProgramQueryParams = {
     PageIndex?: number,
     PageSize?: number
 }
+
+const supportingProgramEndpoint = '/api/v1/supporting-programs';
 
 export const getAllSupportingPrograms = async (searchParams: SupportingProgramQueryParams) => {
 
@@ -44,11 +47,11 @@ export const getAllSupportingPrograms = async (searchParams: SupportingProgramQu
             }
         })
 
-        return {status: 'success', data: response.data}
+        return { status: 'success', data: response.data }
     } catch (error) {
         console.log(error)
-        
-        return {status: 'error', error: 'Xảy ra lỗi'}
+
+        return { status: 'error', error: 'Xảy ra lỗi' }
     }
 
 }
@@ -62,7 +65,7 @@ export const createNewSupportingProgram = async (newSupportingProgram: any) => {
             headers: {
                 requiresAuth: true
             }
-        }) 
+        })
 
         const locationUrl = response.headers.get('Location')
 
@@ -72,14 +75,14 @@ export const createNewSupportingProgram = async (newSupportingProgram: any) => {
 
         if (!newProgramResponseId) throw new Error('Invalid response location')
 
-        return {status: 'success', data: newProgramResponseId}
+        return { status: 'success', data: newProgramResponseId }
 
     } catch (error) {
         console.log(error)
 
         return { status: 'error', error: 'Xảy ra lỗi' }
     }
-} 
+}
 
 
 export const getSupportingProgramById = async (id: number) => {
@@ -91,10 +94,14 @@ export const getSupportingProgramById = async (id: number) => {
             }
         })
 
-        return {status: 'success', data: response.data}
+        return { status: 'success', data: response.data }
     } catch (error) {
         console.log(error)
-        
-        return {status: 'error', error: 'Xảy ra lỗi'}
+
+        return { status: 'error', error: 'Xảy ra lỗi' }
     }
+}
+
+export const toggleSupportingProgramStatus = async (id: number) => {
+    return await put(`${supportingProgramEndpoint}/${id}/toggle-status`)
 }

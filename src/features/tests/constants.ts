@@ -6,6 +6,7 @@ export const TEST_LIST_COLUMNS = [
     { name: "MÔ TẢ", uid: "description" },
     { name: "CÂU HỎI", uid: "questionCount" },
     { name: "GIÁ", uid: "price" },
+    { name: "TRẠNG THÁI", uid: "testStatus" },
     { name: "THÊM", uid: "actions" },
 ];
 

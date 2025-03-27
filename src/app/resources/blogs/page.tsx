@@ -11,6 +11,7 @@ import { BlogTableData } from '@/features/resources/blogs/schemas/blogTableDataS
 import { getAllBlogs, BlogQueryParams } from '@/features/resources/blogs/APIs'
 import ListActions from '@/components/list/ListActions'
 import ListLayout from '@/components/ListLayout'
+import { toggleResourceStatus } from '@/features/resources/common/APIs';
 
 const LIMIT = 12
 
@@ -44,6 +45,14 @@ export default function BlogListPage() {
         }
     }
 
+    const handleToggleStatus = async (id: number) => {
+        try {
+            const result = await toggleResourceStatus(id);
+            fetchData();
+        } catch (error) {
+            toast.error('Có lỗi xảy ra');
+        }
+    }
 
     // for optimization: useDebouncedCallback
     const handleInputChange = useDebouncedCallback((key, value) => {
@@ -61,8 +70,8 @@ export default function BlogListPage() {
     }, 300)
 
 
-    const renderCell = useCallback((articleTableData: BlogTableData, columnKey: React.Key) => {
-        const cellValue = articleTableData[columnKey as keyof BlogTableData]
+    const renderCell = useCallback((blogTableData: BlogTableData, columnKey: React.Key) => {
+        const cellValue = blogTableData[columnKey as keyof BlogTableData]
 
         switch (columnKey) {
             case "id":
@@ -74,15 +83,27 @@ export default function BlogListPage() {
             case "resourceType":
                 return <div>{cellValue as string}</div>
             case "isActive":
-                return <div>{cellValue == true ? "Hiện" : "Ẩn"}</div>
+                return (<span
+                    className={`
+                        px-2 py-1 rounded-full text-xs font-medium
+                        ${cellValue == true
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-red-100 text-red-800'}
+                    `}
+                >
+                    {cellValue == true ? "Enabled" : "Disabled"}
+                </span>)
             case "specializationName":
                 return <div>{cellValue as string}</div>
             case "schoolManagerName":
                 return <div>{cellValue as string}</div>
             case "actions":
-                return <ListActions />
+                return <ListActions
+                    id={blogTableData.id}
+                    onToggleStatus={() => handleToggleStatus(blogTableData.id)}
+                />
         }
-    }, [])
+    }, [handleToggleStatus])
 
     const searchBoxProps = {
         placeholder: 'Tìm kiếm tiêu đề',
