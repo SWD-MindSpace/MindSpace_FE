@@ -27,9 +27,11 @@ export default function AdminSidebar({ itemClasses, subLinkStyle, mainLinkStyle 
                         <Link href='/accounts/parents' className={subLinkStyle}>Phụ huynh</Link>
                     </div>
                 </AccordionItem>
-                <AccordionItem key="2" aria-label="Manage Appointments" title="Quản lý lịch hẹn">
+                <AccordionItem key="2" aria-label="Manage Appointments" title="Quản lý tư vấn">
+                    <Link href='/appointments' className={subLinkStyle}>Quản lý lịch sử tư vấn</Link>
                 </AccordionItem>
                 <AccordionItem key="3" aria-label="Manage Invoices" title="Quản lý thanh toán">
+                    <Link href='/invoices' className={subLinkStyle}>Quản lý lịch sử thanh toán</Link>
                 </AccordionItem>
             </Accordion>
         </div>
