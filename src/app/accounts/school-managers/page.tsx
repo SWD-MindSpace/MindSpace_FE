@@ -5,10 +5,10 @@ import { ACCOUNT_LIST_COLUMNS, ACCOUNT_CENTER_COLUMNS } from '@/features/account
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useDebouncedCallback } from 'use-debounce';
 import { toast } from 'react-toastify'
-import { truncateText } from '@/lib/utils'
+import { formatDate, truncateText } from '@/lib/utils'
 import { AccountTableData } from '@/features/accounts/common/schemas/AccountTableSchema'
 
-import { getAllAccounts, AccountQueryParams } from '@/features/accounts/common/APIs'
+import { getAllAccounts, AccountQueryParams, toggleAccountStatus } from '@/features/accounts/common/APIs'
 import ListActions from '@/components/list/ListActions'
 import ListLayout from '@/components/ListLayout'
 
@@ -48,6 +48,14 @@ export default function SchoolManagerListPage() {
         }
     }
 
+    const handleToggleStatus = async (id: number) => {
+        try {
+            const result = await toggleAccountStatus(id);
+            fetchData();
+        } catch (error) {
+            toast.error('Có lỗi xảy ra');
+        }
+    }
 
     // for optimization: useDebouncedCallback
     const handleInputChange = useDebouncedCallback((key, value) => {
@@ -65,8 +73,8 @@ export default function SchoolManagerListPage() {
     }, 300)
 
 
-    const renderCell = useCallback((testData: AccountTableData, columnKey: React.Key) => {
-        const cellValue = testData[columnKey as keyof AccountTableData]
+    const renderCell = useCallback((accountData: AccountTableData, columnKey: React.Key) => {
+        const cellValue = accountData[columnKey as keyof AccountTableData]
         switch (columnKey) {
             case "id":
                 return <span>{cellValue}</span>
@@ -79,13 +87,23 @@ export default function SchoolManagerListPage() {
             case "userName":
                 return <span>{cellValue}</span>
             case "dateOfBirth":
-                return <span>{cellValue}</span>
+                return <span>{formatDate(typeof cellValue === 'number' ? cellValue.toString() : cellValue)}</span>
             case "status":
-                return <span>{cellValue}</span>
+                return (<span
+                    className={`
+                        px-2 py-1 rounded-full text-xs font-medium
+                        ${cellValue === 'Enabled'
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-red-100 text-red-800'}
+                    `}
+                >
+                    {cellValue}
+                </span>)
             case "actions":
-                return <ListActions />
+                return <ListActions id={accountData.id}
+                    onToggleStatus={() => handleToggleStatus(accountData.id)} />
         }
-    }, [])
+    }, [handleToggleStatus])
 
     const searchBoxProps = {
         placeholder: 'Tìm kiếm tiêu đề',
