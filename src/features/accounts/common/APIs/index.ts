@@ -1,10 +1,12 @@
 // Create functions to call APIs from BE
 
 import { ROLE_ID } from '../constants';
-import { get } from '@/lib/apiCaller';
+import { get, put } from '@/lib/apiCaller';
 import axiosInstance from '@/lib/interceptor';
+
 const baseUrlAccounts = '/api/v1/identities/accounts';
 const baseUrlStudents = '/api/v1/identities/accounts/students';
+
 export type AccountQueryParams = {
     SearchName?: string,
     Sort?: boolean,
@@ -16,6 +18,7 @@ export type AccountQueryParams = {
     PageSize?: number,
     PageIndex?: number
 }
+
 const getQueryString = (searchParams: AccountQueryParams) => {
     // append PageSize to params obj
     searchParams = {
@@ -96,6 +99,9 @@ export const getAllPsychologists = async () => {
     }
 }
 
+export const toggleAccountStatus = async (accountId: number) => {
+    return put(`${baseUrlAccounts}/${accountId}/toggle-status`)
+}
 
 export const createNewAccountByImport = async (roleName, formData) => {
 
