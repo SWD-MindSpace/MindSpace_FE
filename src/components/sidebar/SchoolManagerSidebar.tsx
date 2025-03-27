@@ -50,6 +50,8 @@ export default function SchoolManagerSidebar({ itemClasses, subLinkStyle, mainLi
                         <Link href='/resources/blogs' className={subLinkStyle}>Xem tất cả bài blog</Link>
                     </div>
                 </AccordionItem>
+                <AccordionItem key="6" aria-label="Manage Appointments" title="Quản lý lịch hẹn của học sinh">
+                </AccordionItem>
             </Accordion>
         </div>
     )
