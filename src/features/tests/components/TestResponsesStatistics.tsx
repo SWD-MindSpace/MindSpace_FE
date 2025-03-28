@@ -95,7 +95,7 @@ export default function TestResponseStatistics() {
     };
 
     return (
-        <Card className="w-full max-w-[900px] p-4">
+        <Card className="w-full max-w-[1030px] p-4">
             <CardHeader className="text-lg font-semibold mb-4">
                 Thống kê kết quả bài test
             </CardHeader>

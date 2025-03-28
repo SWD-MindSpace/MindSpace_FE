@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { useSearchParams, useRouter, usePathname } from 'next/navigation'
-import { getAllQuestions, getQuestionById } from '@/features/questions/APIs';
+import { getAllQuestions, getQuestionById, QuestionQueryParams } from '@/features/questions/APIs';
 import { deleteTestDraftById, getTestDraftById, updateTestDraft, createManualForm } from '@/features/tests/APIs';
 import { useDebouncedCallback } from 'use-debounce';
 import { v4 as uuidv4 } from 'uuid';
@@ -13,6 +13,8 @@ import DetailedQuestionModal from '@/features/tests/components/DetailedQuestionM
 import QuestionBank from '@/features/tests/components/QuestionBank';
 import CreateTestForm from '@/features/tests/components/CreateTestForm';
 import { TestCreateForm as TestCreatedForm } from '@/features/tests/schemas/testCreateFormSchema';
+import { getAllSpecializations } from '@/features/specializations/APIs';
+import { Specialization } from '@/features/dashboard/schemas/statisticsSchema';
 
 
 type QuestionOption = {
@@ -24,7 +26,8 @@ type QuestionOption = {
 export type Question = {
     id: number
     content: string
-    questionOptions: QuestionOption[]
+    questionOptions?: QuestionOption[]
+    isNewQuestion?: boolean
 }
 
 
@@ -33,7 +36,8 @@ const LIMIT = 10
 export default function TestCreatePage() {
     const [questionBank, setQuestionBank] = useState<Question[] | null>(null)
     const [filteredQuestionBank, setFilteredQuestionBank] = useState<Question[] | null>(null)
-    const [totalPages, setTotalPages] = useState<number | null>(null)   // pagination for question bank
+    const [specializationArr, setSpecializationArr] = useState<Specialization[]>([])
+    const [totalPages, setTotalPages] = useState<number | null>(null)
     const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null)
     const [isAddingNewQuestion, setAddingNewQuestion] = useState<boolean>(false)
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -67,12 +71,12 @@ export default function TestCreatePage() {
 
 
     const filterQuestionBank = () => {
-        if (form.questionItems.length > 0) {
+        if (form && form.questionItems.length > 0) {
             const questionItemsIds = form.questionItems.map((item) => item.id)
             const filterItems = questionBank?.filter((item) => {
                 return !questionItemsIds.includes(item.id)
             })
-            setFilteredQuestionBank(filterItems)
+            setFilteredQuestionBank(filterItems || null)
         }
         else {
             setFilteredQuestionBank(questionBank)
@@ -98,11 +102,21 @@ export default function TestCreatePage() {
 
 
 
-    const fetchSelectedQuestion = async (isNewQuestion, id) => {
+    const fetchSelectedQuestion = async (isNewQuestion: any, id: number) => {
 
         if (isNewQuestion) {
             const foundQuestion = form?.questionItems.find((question) => question.id === id)
-            setSelectedQuestion(foundQuestion)
+            setSelectedQuestion(
+                foundQuestion
+                    ? {
+                        ...foundQuestion,
+                        questionOptions: foundQuestion.questionOptions.map((option) => ({
+                            ...option,
+                            questionId: foundQuestion.id,
+                        })),
+                    }
+                    : null
+            )
 
         } else { // existing questions in db
             const result = await getQuestionById(id)
@@ -126,7 +140,7 @@ export default function TestCreatePage() {
         await updateTestDraft({
             ...form,
             questionItems: [
-                ...form.questionItems,
+                ...(form?.questionItems || []),
                 {
                     id: questionId,
                     content,
@@ -139,7 +153,7 @@ export default function TestCreatePage() {
     }
 
 
-    const getInitialTestDraftData = async () => {   // initial form can be a brand new OR incomplete form
+    const getInitialTestDraftData = async () => {
 
         const testDraft = localStorage.getItem('testDraft')
 
@@ -159,6 +173,7 @@ export default function TestCreatePage() {
 
         const result = await getTestDraftById(testDraftId)
         if (result.status === 'success') {
+            console.log(result.data)
             setForm(result.data)
         } else {
             toast.error(result?.error)
@@ -176,14 +191,15 @@ export default function TestCreatePage() {
 
 
     const handleClearAllFields = async () => {
-        const testDraftId = JSON.parse(localStorage.getItem('testDraft')).testDraftId
+        const testDraft = localStorage.getItem('testDraft');
+        const testDraftId = testDraft ? JSON.parse(testDraft).testDraftId : null;
         await deleteTestDraftById(testDraftId)
         window.location.reload()
     }
 
 
 
-    const handleClickDeleteQuestion = async (questionId) => {
+    const handleClickDeleteQuestion = async (questionId: number) => {
         const newQuestionItems = form.questionItems.filter((item) => item.id !== questionId);
 
         await updateTestDraft({
@@ -194,7 +210,7 @@ export default function TestCreatePage() {
     }
 
 
-    const handleAddNewQuestionToForm = async (newQuestion) => {
+    const handleAddNewQuestionToForm = async (newQuestion: { id: number; content: string; questionOptions: { id: number; displayedText: string; }[]; }) => {
 
         await updateTestDraft({
             ...form,
@@ -209,7 +225,7 @@ export default function TestCreatePage() {
 
 
     const handleSubmitForm = async () => {
-
+        console.log("Handling submit form")
         await updateTestDraft({
             ...form,
             questionCount: form.questionItems.length,
@@ -221,37 +237,19 @@ export default function TestCreatePage() {
         console.log('handleSubmitForm: ', testDraftId)
 
         const result = await createManualForm(testDraftId)
-
         // upon successful submission
         if (result.status === 'success') {
             localStorage.removeItem('testDraft')
+            console.log('testResponseId: ', result.data)
             window.location.replace(`detail/${result.data}`)
         } else {
             toast.error(result.error)
         }
     }
 
-
-    const specializationArr = [
-        { id: '1', title: 'Lâm sàng' },
-        { id: '2', title: 'Nhận thức' },
-        { id: '3', title: 'Thần kinh' },
-        { id: '4', title: 'Giáo dục' },
-        { id: '5', title: 'Phát triển' },
-        { id: '6', title: 'Pháp y' },
-        { id: '7', title: 'Sức khỏe' },
-        { id: '8', title: 'Thể thao' },
-        { id: '9', title: 'Công nghiệp - Tổ chức' },
-        { id: '10', title: 'Xã hội' },
-        { id: '11', title: 'Tư vấn' },
-        { id: '12', title: 'Thực nghiệm' },
-        { id: '13', title: 'Tích cực' },
-        { id: '14', title: 'Phục hồi' },
-        { id: '15', title: 'Trường học' },
-    ]
-
-    const handleUploadQuestions = (e) => {
-        console.log(e.target)
+    const fetchSpecializations = async () => {
+        const response = await getAllSpecializations();
+        setSpecializationArr(response.data.data)
     }
 
     const openNewQuestionModal = () => {
@@ -265,6 +263,10 @@ export default function TestCreatePage() {
 
     useEffect(() => {
         getInitialTestDraftData()
+    }, [])
+
+    useEffect(() => {
+        fetchSpecializations()
     }, [])
 
 

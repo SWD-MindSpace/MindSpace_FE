@@ -11,37 +11,40 @@ import { toast } from "react-toastify";
 import DetailedQuestionModal from "@/features/tests/components/DetailedQuestionModal";
 import { getQuestionById } from "@/features/questions/APIs";
 import { Question } from "../../create/page";
-import { DateRangePicker } from '@/components/dashboard/DateRangePicker';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import TestResponseStatistics from "@/features/tests/components/TestResponsesStatistics";
+import { getAllSpecializations } from "@/features/specializations/APIs";
+import { Specialization } from "@/features/dashboard/schemas/statisticsSchema";
 
 
 export default function TestDetailPage() {
 
-    const [test, setTest] = useState(null)
+    interface Test {
+        title: string;
+        description: string;
+        testCode: string;
+        testCategory: { id: number };
+        specialization: { id: number };
+        targetUser: string;
+        price: string;
+        questions: { id: number; content: string }[];
+    }
+
+    const [test, setTest] = useState<Test | null>(null)
     const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null)
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [loading, setIsLoading] = useState(false)
+    const [specializationArr, setSpecializationArr] = useState<Specialization[]>([])
 
     const params = useParams()
 
-    const specializationArr = [
-        { id: '1', title: 'Lâm sàng' },
-        { id: '2', title: 'Nhận thức' },
-        { id: '3', title: 'Thần kinh' },
-        { id: '4', title: 'Giáo dục' },
-        { id: '5', title: 'Phát triển' },
-        { id: '6', title: 'Pháp y' },
-        { id: '7', title: 'Sức khỏe' },
-        { id: '8', title: 'Thể thao' },
-        { id: '9', title: 'Công nghiệp - Tổ chức' },
-        { id: '10', title: 'Xã hội' },
-        { id: '11', title: 'Tư vấn' },
-        { id: '12', title: 'Thực nghiệm' },
-        { id: '13', title: 'Tích cực' },
-        { id: '14', title: 'Phục hồi' },
-        { id: '15', title: 'Trường học' },
-    ]
+    const fetchSpecializations = async () => {
+        const response = await getAllSpecializations();
+        setSpecializationArr(response.data.data)
+    }
+
+    useEffect(() => {
+        fetchSpecializations()
+    }, [])
 
     const categoryArr = [
         { id: '1', title: 'Tâm lý' },
@@ -73,13 +76,13 @@ export default function TestDetailPage() {
     }
 
 
-const fetchSelectedQuestion = async (id: number) => {
+    const fetchSelectedQuestion = async (id: number) => {
 
         // existing questions in db
         const result = await getQuestionById(id)
 
         if (result.status === 'success') {
-            setSelectedQuestion(result.data)
+            setSelectedQuestion({ ...result.data, id: result.data.id.toString() as string })
         } else {
             setSelectedQuestion(null)
             toast.error(result?.error)
@@ -170,7 +173,7 @@ const fetchSelectedQuestion = async (id: number) => {
                                     size='lg'
                                     id="category"
                                     type='text'
-                                    defaultValue={categoryArr.find((item) => Number(item.id) === test.testCategory.id)?.title}
+                                    defaultValue={test ? categoryArr.find((item) => Number(item.id) === test.testCategory.id)?.title : ''}
                                 />
                             </div>
 
@@ -186,7 +189,7 @@ const fetchSelectedQuestion = async (id: number) => {
                                     size='lg'
                                     id="specialization"
                                     type='text'
-                                    defaultValue={specializationArr.find((item) => Number(item.id) === test.specialization.id)?.title}
+                                    defaultValue={test ? specializationArr.find((item) => Number(item.id) === test.specialization.id)?.name : ''}
                                 />
                             </div>
 

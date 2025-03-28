@@ -58,6 +58,7 @@ const Dashboard = () => {
 
             // Fetch Recent Tests statistics
             const recentTestsResponse = await getRecentTests(params);
+            console.log('recentTestsResponse:', recentTestsResponse);
             setRecentTests(recentTestsResponse.data);
 
             // Fetch Supporting Programs statistics
@@ -170,16 +171,18 @@ const Dashboard = () => {
                 </CardHeader>
                 <CardContent>
                     {recentTests?.map((test) => (
-                        <div key={test.id} className="flex items-center justify-between p-4 border-b last:border-b-0">
-                            <div>
-                                <h4 className="font-medium">{test.title} ({test.testCode})</h4>
-                                <p className="text-sm text-gray-500">Lĩnh vực: {test.specialization?.name}</p>
+                        <Link href={`/tests/detail/${test.id}`} className="block">
+                            <div key={test.id} className="flex items-center justify-between p-4 border-b last:border-b-0">
+                                <div>
+                                    <h4 className="font-medium">{test.title} ({test.testCode})</h4>
+                                    <p className="text-sm text-gray-500">Lĩnh vực: {test.specialization?.name}</p>
+                                </div>
+                                <div className="flex items-center space-x-4">
+                                    <span className="font-bold">{test.questionCount} câu hỏi</span>
+                                    <Button variant="outline" size="sm">Chi tiết</Button>
+                                </div>
                             </div>
-                            <div className="flex items-center space-x-4">
-                                <span className="font-bold">{test.questionCount} câu hỏi</span>
-                                <Button variant="outline" size="sm">Chi tiết</Button>
-                            </div>
-                        </div>
+                        </Link>
                     ))}
                 </CardContent>
             </Card>
@@ -242,7 +245,7 @@ const Dashboard = () => {
                                 >
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis dataKey="name" />
-                                    <YAxis />
+                                    <YAxis tickSize={1} allowDecimals={false} />
                                     <Tooltip />
                                     <Bar dataKey="appointments" fill="#8884d8">
                                         {counselingData.map((entry, index) => (

@@ -11,6 +11,7 @@ import { ArticleTableData } from '@/features/resources/articles/schemas/articleT
 import { getAllArticles, ArticleQueryParams } from '@/features/resources/articles/APIs'
 import ListActions from '@/components/list/ListActions'
 import ListLayout from '@/components/ListLayout'
+import { toggleResourceStatus } from '@/features/resources/common/APIs';
 
 const LIMIT = 12
 
@@ -44,6 +45,14 @@ export default function ArticleListPage() {
         }
     }
 
+    const handleToggleStatus = async (id: number) => {
+        try {
+            const result = await toggleResourceStatus(id);
+            fetchData();
+        } catch (error) {
+            toast.error('Có lỗi xảy ra');
+        }
+    }
 
     // for optimization: useDebouncedCallback
     const handleInputChange = useDebouncedCallback((key, value) => {
@@ -74,7 +83,16 @@ export default function ArticleListPage() {
             case "resourceType":
                 return <div>{cellValue == "Article" ? "Bài báo" : "Bài blog"}</div>
             case "isActive":
-                return <div>{cellValue == true ? "Hiện" : "Ẩn"}</div>
+                return (<span
+                    className={`
+                        px-2 py-1 rounded-full text-xs font-medium
+                        ${cellValue == true
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-red-100 text-red-800'}
+                    `}
+                >
+                    {cellValue == true ? "Enabled" : "Disabled"}
+                </span>)
             case "specializationName":
                 return <div>{cellValue as string}</div>
             case "schoolManagerName":
@@ -82,9 +100,12 @@ export default function ArticleListPage() {
             case "articleUrl":
                 return <div style={{ color: 'blue', textDecoration: 'underline' }}><a href={cellValue as string}>Link</a></div>
             case "actions":
-                return <ListActions />
+                return (<ListActions
+                    id={articleTableData.id}
+                    onToggleStatus={() => handleToggleStatus(articleTableData.id)}
+                />)
         }
-    }, [])
+    }, [handleToggleStatus])
 
     const searchBoxProps = {
         placeholder: 'Tìm kiếm tiêu đề',
@@ -94,8 +115,6 @@ export default function ArticleListPage() {
     useEffect(() => {
         fetchData()
     }, [searchParams])
-
-
 
     return (
         <>

@@ -5,8 +5,26 @@ import { Select, SelectItem } from "@heroui/select";
 import { Textarea } from "@heroui/input";
 import { BsTrash3 } from "react-icons/bs";
 import { PlusIcon } from "@/components/icon/PlusIcon";
+import { Specialization } from "@/features/dashboard/schemas/statisticsSchema";
 
 
+
+interface BlogForm {
+    title: string;
+    introduction: string;
+    specializationId: number | null;
+    sections: { id: number; heading: string; htmlContent: string }[];
+}
+
+interface CreateBlogFormProps {
+    form: BlogForm;
+    specializationArr: Specialization[];
+    onSubmit: (event: React.FormEvent) => void;
+    onFormInputChange: (field: string, value: any) => void;
+    onClearAllFields: () => void;
+    onOpenNewSectionModal: () => void;
+    onClickDeleteContent: (id: number) => void;
+}
 
 export default function CreateBlogForm({
     form,
@@ -16,7 +34,7 @@ export default function CreateBlogForm({
     onClearAllFields,
     onOpenNewSectionModal,
     onClickDeleteContent
-}) {
+}: CreateBlogFormProps) {
 
     const contentInFormStyles = {
         base: 'cursor-pointer',
@@ -101,7 +119,7 @@ export default function CreateBlogForm({
                                     key={specialization.id}
                                     value={specialization.id}
                                 >
-                                    {specialization.title}
+                                    {specialization.name}
                                 </SelectItem>
                             ))}
                         </Select>

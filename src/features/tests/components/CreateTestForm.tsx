@@ -4,7 +4,27 @@ import { Input } from "@heroui/input";
 import { Select, SelectItem } from "@heroui/select";
 import { Textarea } from "@heroui/input";
 import { BsTrash3 } from "react-icons/bs";
+import { Specialization } from "@/features/dashboard/schemas/statisticsSchema";
 
+
+interface CreateTestFormProps {
+    form: {
+        title?: string;
+        description?: string;
+        testCode?: string;
+        testCategoryId?: number;
+        specializationId?: number;
+        targetUser?: number;
+        price?: number;
+        questionItems: { id: number; content: string; isNewQuestion: boolean }[];
+    };
+    specializationArr: Specialization[];
+    onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+    onFormInputChange: (field: string, value: any) => void;
+    onClearAllFields: () => void;
+    onClickQuestion: (isNewQuestion: boolean, id: number) => void;
+    onClickDeleteQuestion: (id: number) => void;
+}
 
 export default function CreateTestForm({
     form,
@@ -14,7 +34,7 @@ export default function CreateTestForm({
     onClearAllFields,
     onClickQuestion,
     onClickDeleteQuestion
-}) {
+}: CreateTestFormProps) {
 
     const questionInFormStyles = {
         base: 'cursor-pointer',
@@ -143,7 +163,7 @@ export default function CreateTestForm({
                                     key={specialization.id}
                                     value={specialization.id}
                                 >
-                                    {specialization.title}
+                                    {specialization.name}
                                 </SelectItem>
                             ))}
                         </Select>
@@ -187,7 +207,7 @@ export default function CreateTestForm({
                             type='text'
                             isRequired
                             errorMessage={'Bắt buộc nhập giá'}
-                            defaultValue={form?.price || ''}
+                            defaultValue={form?.price !== undefined && form?.price != null ? String(form.price) : ''}
                             onValueChange={(value) => onFormInputChange('price', Number(value))}
                         />
                     </div>

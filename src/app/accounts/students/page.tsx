@@ -5,10 +5,10 @@ import { ACCOUNT_LIST_COLUMNS, ACCOUNT_CENTER_COLUMNS } from '@/features/account
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useDebouncedCallback } from 'use-debounce';
 import { toast } from 'react-toastify'
-import { truncateText } from '@/lib/utils'
+import { formatDate, truncateText } from '@/lib/utils'
 import { AccountTableData } from '@/features/accounts/common/schemas/AccountTableSchema'
 
-import { getAllAccounts, AccountQueryParams, getAllStudents } from '@/features/accounts/common/APIs'
+import { getAllAccounts, AccountQueryParams, getAllStudents, toggleAccountStatus } from '@/features/accounts/common/APIs'
 import ListActions from '@/components/list/ListActions'
 import ListLayout from '@/components/ListLayout'
 
@@ -32,10 +32,9 @@ export default function StudentListPage() {
         const params = Object.fromEntries(searchParams) as AccountQueryParams
         params.RoleId = ROLE_ID.STUDENT
         params.PageSize = LIMIT
+        params.SchoolId = schoolId
 
-        // sau nay xu ly duoc access token roi thi se dung ham duoi nay
         const result = await getAllStudents(params)
-
         if (result.status === 'success') {
             const { data, count } = result.data
             if (count) {
@@ -53,13 +52,21 @@ export default function StudentListPage() {
         }
     }
 
+    const handleToggleStatus = async (id: number) => {
+        try {
+            const result = await toggleAccountStatus(id);
+            fetchData();
+        } catch (error) {
+            toast.error('Có lỗi xảy ra');
+        }
+    }
 
     // for optimization: useDebouncedCallback
     const handleInputChange = useDebouncedCallback((key, value) => {
         const params = new URLSearchParams(searchParams);
 
         params.set(key, value);
-        if (params.has('PageIndex') && key !== 'PageIndex') {   // if search or filter, reset pageIndex to 1
+        if (params.has('PageIndex') && key !== 'PageIndex') {
             params.delete('PageIndex')
         }
         if (!value) {
@@ -70,27 +77,39 @@ export default function StudentListPage() {
     }, 300)
 
 
-    const renderCell = useCallback((testData: AccountTableData, columnKey: React.Key) => {
-        const cellValue = testData[columnKey as keyof AccountTableData]
+    const renderCell = useCallback((accountData: AccountTableData, columnKey: React.Key) => {
+        const cellValue = accountData[columnKey as keyof AccountTableData]
         switch (columnKey) {
             case "id":
-                return <span>{cellValue}</span>
             case "email":
-                return <span>{cellValue}</span>
             case "fullName":
-                return <span>{cellValue}</span>
             case "phoneNumber":
-                return <span>{cellValue}</span>
             case "userName":
                 return <span>{cellValue}</span>
-            case "dateOfBirth":
-                return <span>{cellValue}</span>
             case "status":
-                return <span>{cellValue}</span>
+                return (<span
+                    className={`
+                        px-2 py-1 rounded-full text-xs font-medium
+                        ${cellValue === 'Enabled'
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-red-100 text-red-800'}
+                    `}
+                >
+                    {cellValue}
+                </span>)
+            case "dateOfBirth":
+                return <span>{formatDate(typeof cellValue === 'number' ? cellValue.toString() : cellValue)}</span>
             case "actions":
-                return <ListActions />
+                return (
+                    <ListActions
+                        id={accountData.id}
+                        onToggleStatus={() => handleToggleStatus(accountData.id)}
+                    />
+                )
+            default:
+                return <span>{cellValue}</span>
         }
-    }, [])
+    }, [handleToggleStatus])
 
     const searchBoxProps = {
         placeholder: 'Tìm kiếm tiêu đề',

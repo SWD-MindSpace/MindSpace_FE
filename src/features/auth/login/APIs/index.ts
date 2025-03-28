@@ -4,7 +4,7 @@ import { Base64 } from 'js-base64';
 
 
 export async function login({ email, password }: LoginSchema) {
-    
+
     const payload = {
         email,
         password
@@ -16,7 +16,7 @@ export async function login({ email, password }: LoginSchema) {
             headers: {
                 requiresAuth: false
             }
-        }) 
+        })
 
         const { id_token, access_token, refresh_token } = response.data
 

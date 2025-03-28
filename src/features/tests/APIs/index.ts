@@ -1,7 +1,8 @@
 import axiosInstance from '@/lib/interceptor';
-import { get } from '@/lib/apiCaller';
+import { get, put, remove } from '@/lib/apiCaller';
 import { TestCreateForm } from '../schemas/testCreateFormSchema';
 
+const testEndpoint = '/api/v1/tests';
 export type TestQueryParams = {
     Title?: string,
     TestCode?: string,
@@ -66,8 +67,7 @@ export const createManualForm = async (testDraftId: string) => {
             }
         })
 
-        const locationUrl = response.headers.get('Location')
-
+        const locationUrl = response.headers['location']
         if (!locationUrl) throw new Error('Location header not found')
 
         const testResponseId = locationUrl.split('/').pop()
@@ -79,7 +79,7 @@ export const createManualForm = async (testDraftId: string) => {
     } catch (error) {
         console.log(error)
 
-        const errorMessage = typeof (error) === 'string' ? error.message : 'Xảy ra lỗi'
+        const errorMessage = (error instanceof Error && error.message) ? error.message : 'Xảy ra lỗi'
 
         return { status: 'error', error: errorMessage }
     }
@@ -103,6 +103,38 @@ export const getTestById = async (id: number) => {
     }
 }
 
+export const toggleTestStatus = async (id: number) => {
+    return await put(`${testEndpoint}/${id}/toggle-status`)
+}
+
+export const deleteTestById = async (id: number) => {
+    return await remove(`${testEndpoint}/${id}`)
+}
+
+export const importTest = async (formData: FormData) => {
+
+    try {
+
+        const response = await axiosInstance.post(`${testEndpoint}/import`, formData, {
+            headers: {
+                requiresAuth: true,
+                "Content-Type": "multipart/form-data"
+            }
+        })
+
+        return {
+            status: 'success',
+            data: response.data,
+            headers: response.headers
+        }
+
+    } catch (error) {
+
+        console.log(error)
+
+        return { status: 'error', error: 'Xảy ra lỗi' }
+    }
+}
 
 // ==================================
 //             TEST DRAFT

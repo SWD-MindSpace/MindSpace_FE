@@ -27,7 +27,7 @@ export default function SchoolManagerSidebar({ itemClasses, subLinkStyle, mainLi
                 </AccordionItem>
                 <AccordionItem key="2" aria-label="Manage Psychological Tests" title="Quản lý bài test">
                     <div className='flex flex-col'>
-                        <Link href='/tests/create' className={subLinkStyle}>Tạo bài test mới</Link>
+                        <Link href='/tests/create-mode' className={subLinkStyle}>Tạo bài test mới</Link>
                         <Link href='/tests' className={subLinkStyle}>Xem tất cả bài test</Link>
                         {/* <Link href='/questions' className={subLinkStyle}>Xem tất cả câu hỏi</Link> */}
                     </div>
@@ -37,6 +37,21 @@ export default function SchoolManagerSidebar({ itemClasses, subLinkStyle, mainLi
                         <Link href='/supporting-programs/create' className={subLinkStyle}>Tạo chương trình mới</Link>
                         <Link href='/supporting-programs' className={subLinkStyle}>Xem tất cả chương trình</Link>
                     </div>
+                </AccordionItem>
+                <AccordionItem key="4" aria-label="Manage Articles" title="Quản lý bài báo">
+                    <div className='flex flex-col'>
+                        <Link href='/resources/articles/create' className={subLinkStyle}>Tạo bài báo mới</Link>
+                        <Link href='/resources/articles' className={subLinkStyle}>Xem tất cả bài báo</Link>
+                    </div>
+                </AccordionItem>
+                <AccordionItem key="5" aria-label="Manage Blogs" title="Quản lý bài blog">
+                    <div className='flex flex-col'>
+                        <Link href='/resources/blogs/create' className={subLinkStyle}>Tạo bài đăng mới</Link>
+                        <Link href='/resources/blogs' className={subLinkStyle}>Xem tất cả bài blog</Link>
+                    </div>
+                </AccordionItem>
+                <AccordionItem key="6" aria-label="Manage Appointments" title="Quản lý tư vấn">
+                    <Link href='/appointments' className={subLinkStyle}>Quản lý lịch sử tư vấn</Link>
                 </AccordionItem>
             </Accordion>
         </div>

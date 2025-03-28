@@ -9,7 +9,7 @@ import { truncateText } from '@/lib/utils'
 import { parse, format } from 'date-fns'
 import { SupportingProgramTableData } from '@/features/supporting-programs/schemas/supportingProgramTableDataSchema'
 
-import { getAllSupportingPrograms, SupportingProgramQueryParams } from '@/features/supporting-programs/APIs'
+import { getAllSupportingPrograms, SupportingProgramQueryParams, toggleSupportingProgramStatus } from '@/features/supporting-programs/APIs'
 import ListActions from '@/components/list/ListActions'
 import ListLayout from '@/components/ListLayout'
 
@@ -46,6 +46,14 @@ export default function SupportingProgramListPage() {
         }
     }
 
+    const handleToggleStatus = async (id: number) => {
+        try {
+            const result = await toggleSupportingProgramStatus(id);
+            fetchData();
+        } catch (error) {
+            toast.error('Có lỗi xảy ra');
+        }
+    }
 
     // for optimization: useDebouncedCallback
     const handleInputChange = useDebouncedCallback((key, value) => {
@@ -63,8 +71,8 @@ export default function SupportingProgramListPage() {
     }, 300)
 
 
-    const renderCell = useCallback((articleTableData: SupportingProgramTableData, columnKey: React.Key) => {
-        const cellValue = articleTableData[columnKey as keyof SupportingProgramTableData]
+    const renderCell = useCallback((programData: SupportingProgramTableData, columnKey: React.Key) => {
+        const cellValue = programData[columnKey as keyof SupportingProgramTableData]
 
         switch (columnKey) {
             case "id":
@@ -84,11 +92,23 @@ export default function SupportingProgramListPage() {
             case "startDateAt":
                 return <div>{cellValue as string}</div>
             case "isActive":
-                return <div>{cellValue == true ? "Đang hoạt động" : "Ngưng hoạt động"}</div>
+                return (<span
+                    className={`
+                        px-2 py-1 rounded-full text-xs font-medium
+                        ${cellValue == true
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-red-100 text-red-800'}
+                    `}
+                >
+                    {cellValue == true ? "Enabled" : "Disabled"}
+                </span>)
             case "actions":
-                return <ListActions />
+                return <ListActions
+                    id={programData.id}
+                    onToggleStatus={() => handleToggleStatus(programData.id)}
+                />
         }
-    }, [])
+    }, [handleToggleStatus])
 
     const searchBoxProps = {
         placeholder: 'Tìm kiếm tiêu đề',

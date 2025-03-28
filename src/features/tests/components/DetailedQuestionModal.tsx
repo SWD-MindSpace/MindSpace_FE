@@ -11,7 +11,17 @@ import { LiaCircleSolid } from "react-icons/lia";
 
 
 
-export default function DetailedQuestionModal({ selectedQuestion, isOpen, onOpenChange, onCloseQuestion, onAddQuestionToForm }) {
+interface QuestionOption {
+    displayedText: string;
+}
+
+interface SelectedQuestion {
+    id: string;
+    content: string;
+    questionOptions: QuestionOption[];
+}
+
+export default function DetailedQuestionModal({ selectedQuestion, isOpen, onOpenChange, onCloseQuestion, onAddQuestionToForm }: { selectedQuestion: SelectedQuestion; isOpen: boolean; onOpenChange: (isOpen: boolean) => void; onCloseQuestion: () => void; onAddQuestionToForm: (id: string, content: string) => void }) {
 
     const handleAddQuestionsToForm = () => {
         onAddQuestionToForm(selectedQuestion.id, selectedQuestion.content)

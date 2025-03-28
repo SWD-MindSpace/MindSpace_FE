@@ -1,7 +1,11 @@
 // Create functions to call APIs from BE
 
 import { ROLE_ID } from '../constants';
+import { get, put } from '@/lib/apiCaller';
 import axiosInstance from '@/lib/interceptor';
+
+const baseUrlAccounts = '/api/v1/identities/accounts';
+const baseUrlStudents = '/api/v1/identities/accounts/students';
 
 export type AccountQueryParams = {
     SearchName?: string,
@@ -14,6 +18,7 @@ export type AccountQueryParams = {
     PageSize?: number,
     PageIndex?: number
 }
+
 const getQueryString = (searchParams: AccountQueryParams) => {
     // append PageSize to params obj
     searchParams = {
@@ -39,15 +44,10 @@ export const getAllAccounts = async (searchParams: AccountQueryParams) => {
 
     try {
 
-        const response = await axiosInstance.get(`/api/v1/identities/accounts?${queryString}`, {
-            headers: {
-                requiresAuth: true
-            }
-        })    
+        const response = await get(baseUrlAccounts, searchParams)
+        const responseData = response?.data;
+        return { status: 'success', data: responseData }
 
-        console.log(response)
-
-        return { status: 'success', data: response.data }
 
     } catch (error) {
 
@@ -83,18 +83,13 @@ export const getProfileById = async (id: Number) => {
 
 export const getAllStudents = async (searchParams: AccountQueryParams) => {
     const queryString = getQueryString(searchParams)
+    console.log(queryString)
 
     try {
 
-        const response = await axiosInstance.get(`/api/v1/identities/accounts?${queryString}`, {
-            headers: {
-                requiresAuth: true
-            }
-        })    
-
-        console.log(response)
-
-        return { status: 'success', data: response.data }
+        const response = await get(baseUrlStudents, searchParams)
+        const responseData = response?.data;
+        return { status: 'success', data: responseData }
 
     } catch (error) {
 
@@ -112,16 +107,12 @@ export const getAllPsychologists = async () => {
     }
 
     const queryString = getQueryString(searchParams)
-    
+
     try {
 
-        const response = await axiosInstance.get(`/api/v1/identities/accounts?${queryString}`, {
-            headers: {
-                requiresAuth: true
-            }
-        })    
-
-        return { status: 'success', data: response.data.data }
+        const response = await get(baseUrlAccounts, searchParams)
+        const responseData = response?.data;
+        return { status: 'success', data: responseData }
 
     } catch (error) {
 
@@ -131,17 +122,20 @@ export const getAllPsychologists = async () => {
     }
 }
 
+export const toggleAccountStatus = async (accountId: number) => {
+    return put(`${baseUrlAccounts}/${accountId}/toggle-status`)
+}
 
-export const createNewAccountByImport = async (roleName, formData) => {
+export const createNewAccountByImport = async (roleName: any, formData: FormData) => {
 
     try {
 
         const response = await axiosInstance.post(`/api/v1/identities/register-for/${roleName}`, formData, {
             headers: {
                 requiresAuth: true,
-                "Content-Type": "multipart/form-data" 
+                "Content-Type": "multipart/form-data"
             }
-        })    
+        })
 
         return { status: 'success', data: response.data }
 

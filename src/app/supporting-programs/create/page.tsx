@@ -27,7 +27,7 @@ export default function SPCreatePage() {
         const result = await getAllPsychologists()
 
         if (result.status === 'success') {
-            setPsychologistArr(result.data)
+            setPsychologistArr(result.data.data)
         } else {
             toast.error(result?.error)
         }
@@ -44,12 +44,12 @@ export default function SPCreatePage() {
     }
 
 
-    const handleSubmitForm = async (spForm) => {
+    const handleSubmitForm = async (spForm: any) => {
 
         const newSupportingProgram = {
             ...spForm,
             thumbnailUrl: thumbnailUrl,
-            schoolManagerId: JSON.parse(localStorage.getItem('userInfo')).userId
+            schoolManagerId: JSON.parse(localStorage.getItem('userInfo') || '{}').userId
         }
 
 

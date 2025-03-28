@@ -6,8 +6,8 @@ import 'react-datepicker/dist/react-datepicker.css';
 import styles from './styles/TimeslotCalendar.module.css';
 import { post } from '@/lib/apiCaller';
 
-const baseUrl = process.env.NEXT_PUBLIC_API_URL + '/api/v1/psychologist-schedules';
 const psychologistScheduleEndpoint = '/api/v1/psychologist-schedules';
+const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL + psychologistScheduleEndpoint;
 
 // Interface cho TimeSlot lấy từ API
 interface TimeSlotFromApi {
