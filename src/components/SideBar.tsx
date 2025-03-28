@@ -1,26 +1,29 @@
 'use client'
 
-import React from 'react'
-import { usePathname } from "next/navigation";
+import React, { useEffect, useState } from 'react'
+import { usePathname, useRouter } from "next/navigation";
 import AdminSidebar from './sidebar/AdminSidebar';
 import PsychologistSidebar from './sidebar/PsychologistSidebar';
 import SchoolManagerSidebar from './sidebar/SchoolManagerSidebar';
-import { redirect } from 'next/navigation'
 
 export default function SideBar() {
     const pathname = usePathname()
+    const router = useRouter()
+    const [role, setRole] = useState<string | null>(null)
 
-    const isLoginPage = pathname === '/login'
+    useEffect(() => {
+        const isLoginPage = pathname === '/login'
+        if (isLoginPage) return
 
-    if (isLoginPage) return
+        const userInfo = localStorage.getItem('userInfo')
+        if (!userInfo) {
+            router.push('/login')
+            return
+        }
 
-    const isLoggedIn = localStorage.getItem('userInfo')
-
-    if (!isLoggedIn) {
-        redirect('/login')
-    }
-
-    const role = JSON.parse(localStorage.getItem('userInfo')).role;
+        const userData = JSON.parse(userInfo)
+        setRole(userData.role)
+    }, [pathname, router])
 
     const itemClasses = {
         base: "py-0 w-full",
@@ -31,7 +34,6 @@ export default function SideBar() {
     };
 
     const mainLinkStyle = 'text-sm hover:bg-gray-100 rounded-lg h-14 flex items-center mx-2 px-4'
-
     const subLinkStyle = 'hover:bg-default-100 hover:text-primary-blue px-3 py-2 rounded-lg flex items-center'
 
     let choosenSideBar = null
@@ -40,7 +42,7 @@ export default function SideBar() {
         choosenSideBar = <AdminSidebar itemClasses={itemClasses} subLinkStyle={subLinkStyle} mainLinkStyle={mainLinkStyle} />
     } else if (role === 'Psychologist') {
         choosenSideBar = <PsychologistSidebar itemClasses={itemClasses} subLinkStyle={subLinkStyle} mainLinkStyle={mainLinkStyle} />
-    } else {
+    } else if (role === 'SchoolManager') {
         choosenSideBar = <SchoolManagerSidebar itemClasses={itemClasses} subLinkStyle={subLinkStyle} mainLinkStyle={mainLinkStyle} />
     }
 
