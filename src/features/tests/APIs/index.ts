@@ -1,5 +1,5 @@
 import axiosInstance from '@/lib/interceptor';
-import { get, put } from '@/lib/apiCaller';
+import { get, put, remove } from '@/lib/apiCaller';
 import { TestCreateForm } from '../schemas/testCreateFormSchema';
 
 const testEndpoint = '/api/v1/tests';
@@ -67,7 +67,10 @@ export const createManualForm = async (testDraftId: string) => {
             }
         })
 
-        const locationUrl = response.headers.get('Location')
+        console.log(response)
+
+        const locationUrl = response.headers['location']
+        console.log(locationUrl)
 
         if (!locationUrl) throw new Error('Location header not found')
 
@@ -80,7 +83,7 @@ export const createManualForm = async (testDraftId: string) => {
     } catch (error) {
         console.log(error)
 
-        const errorMessage = typeof (error) === 'string' ? error.message : 'Xảy ra lỗi'
+        const errorMessage = (error instanceof Error && error.message) ? error.message : 'Xảy ra lỗi'
 
         return { status: 'error', error: errorMessage }
     }
@@ -106,6 +109,10 @@ export const getTestById = async (id: number) => {
 
 export const toggleTestStatus = async (id: number) => {
     return await put(`${testEndpoint}/${id}/toggle-status`)
+}
+
+export const deleteTestById = async (id: number) => {
+    return await remove(`${testEndpoint}/${id}`)
 }
 
 // ==================================
