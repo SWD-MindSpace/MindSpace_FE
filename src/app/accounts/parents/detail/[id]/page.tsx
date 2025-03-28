@@ -2,24 +2,23 @@
 
 import React from 'react'
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import { getBlogById } from "@/features/resources/blogs/APIs";
-import DetailedBlogForm from "@/features/resources/blogs/components/DetailedBlogForm";
+import { useParams } from 'next/navigation';
+import { getProfileById } from '@/features/accounts/common/APIs';
 import { Card, CardHeader, CardBody, Image } from "@heroui/react";
 import { toast } from "react-toastify";
+import DetailedParentForm from '@/features/accounts/components/DetailedParentForm';
 
-export default function BlogDetailPage() {
+export default function ParentDetailPage() {
 
-    const [blog, setBlog] = useState(null)
+    const [form, setForm] = useState(null)
 
     const params = useParams()
 
-
-    const fetchBlogById = async () => {
-        const result = await getBlogById(Number(params.id))
+    const fetchParentById = async () => {
+        const result = await getProfileById(Number(params.id))
 
         if (result.status === 'success') {
-            setBlog(result.data)
+            setForm(result.data)
         } else {
             toast(result.error)
         }
@@ -27,17 +26,18 @@ export default function BlogDetailPage() {
 
 
     useEffect(() => {
-        fetchBlogById()
+        fetchParentById()
     }, [params])
 
+
     return (
-        blog && (
+        form && (
             <div className='flex flex-row h-auto gap-x-5'>
 
                 {/* DETAILED FORM */}
                 <div className='w-[60%]'>
-                    <DetailedBlogForm
-                        form={blog}
+                    <DetailedParentForm
+                        form={form}
                     />
                 </div>
 
@@ -55,7 +55,7 @@ export default function BlogDetailPage() {
                             <Image
                                 alt="Card background"
                                 className="object-cover rounded-xl"
-                                src={blog.thumbnailUrl || 'https://placehold.co/600x400'}
+                                src={form?.imageUrl || 'https://placehold.co/600x400'}
                                 width="100%"
                             />
                         </CardBody>

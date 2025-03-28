@@ -12,7 +12,7 @@ export default function SchoolManagerSidebar({ itemClasses, subLinkStyle, mainLi
     return (
         <div>
             <div className={mainLinkStyle}>
-                <Link href="/dashboard">Dashboard</Link>
+                <Link href="/dashboard">Thống kê</Link>
             </div>
             <Accordion
                 selectionMode="multiple"

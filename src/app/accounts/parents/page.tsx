@@ -104,7 +104,6 @@ export default function ParentListPage() {
                     tableCenterColumns={ACCOUNT_CENTER_COLUMNS}
                     searchParams={searchParams}
                     totalPages={totalPages as number | null}
-                    createHref='/parents/create'
                     searchBoxProps={searchBoxProps}
                     totalItems={totalItems}
                     renderCell={renderCell}
