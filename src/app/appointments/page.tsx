@@ -26,6 +26,9 @@ const ManageAppointmentHistoryPage = () => {
     const router = useRouter();
     const pageSize = 12;
 
+    const currentUser = localStorage.getItem('userInfo');
+    const schoolId = currentUser ? JSON.parse(currentUser).schoolId : null;
+
     const fetchAppointments = async (filters: AppointmentQueryParams) => {
         setLoading(true);
         try {
@@ -41,7 +44,7 @@ const ManageAppointmentHistoryPage = () => {
                 studentEmail: filters.studentEmail || '',
                 startDate: startDateString || null,
                 endDate: endDateString || null,
-                schoolId: filters.schoolId || '',
+                schoolId: schoolId || '',
                 appointmentStatus: filters.appointmentStatus !== undefined ? filters.appointmentStatus : null,
                 pageIndex: filters.pageIndex || 1,
                 pageSize: pageSize

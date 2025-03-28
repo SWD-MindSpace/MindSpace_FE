@@ -1,10 +1,12 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { createNewArticle } from '@/features/resources/articles/APIs';
 import ImageUpload from '@/features/resources/blogs/components/ImageUpload';
 import CreateArticleForm from '@/features/resources/articles/components/CreateArticleForm';
 import { toast } from 'react-toastify'
+import { Specialization } from '@/features/dashboard/schemas/statisticsSchema';
+import { getAllSpecializations } from '@/features/specializations/APIs';
 
 // interface Blog Form
 
@@ -13,9 +15,10 @@ export default function ArticleCreatePage() {
     const [form, setForm] = useState({
         articleUrl: 'https://www.annualreviews.org/content/journals/10.1146/annurev.psych.55.090902.141927',
         thumbnailUrl: 'https://placehold.co/600x400',
-        schoolManagerId: JSON.parse(localStorage.getItem('userInfo')).userId
+        schoolManagerId: JSON.parse(localStorage.getItem('userInfo') || '{}').userId
     })
     const [thumbnailUrl, setThumbnailUrl] = useState('https://placehold.co/600x400')
+    const [specializationArr, setSpecializationArr] = useState<Specialization[]>([])
 
 
     const handleFormInputChange = (key: string, value: any) => {
@@ -32,7 +35,8 @@ export default function ArticleCreatePage() {
     const handleClearAllFields = async () => {
         setForm({
             articleUrl: 'https://www.annualreviews.org/content/journals/10.1146/annurev.psych.55.090902.141927',
-            schoolManagerId: JSON.parse(localStorage.getItem('userInfo')).userId
+            thumbnailUrl: 'https://placehold.co/600x400',
+            schoolManagerId: JSON.parse(localStorage.getItem('userInfo') || '{}').userId
         })
         setThumbnailUrl('https://placehold.co/600x400')
     }
@@ -55,23 +59,14 @@ export default function ArticleCreatePage() {
     }
 
 
-    const specializationArr = [
-        { id: '1', title: 'Lâm sàng' },
-        { id: '2', title: 'Nhận thức' },
-        { id: '3', title: 'Thần kinh' },
-        { id: '4', title: 'Giáo dục' },
-        { id: '5', title: 'Phát triển' },
-        { id: '6', title: 'Pháp y' },
-        { id: '7', title: 'Sức khỏe' },
-        { id: '8', title: 'Thể thao' },
-        { id: '9', title: 'Công nghiệp - Tổ chức' },
-        { id: '10', title: 'Xã hội' },
-        { id: '11', title: 'Tư vấn' },
-        { id: '12', title: 'Thực nghiệm' },
-        { id: '13', title: 'Tích cực' },
-        { id: '14', title: 'Phục hồi' },
-        { id: '15', title: 'Trường học' },
-    ]
+    const fetchSpecializations = async () => {
+        const response = await getAllSpecializations();
+        setSpecializationArr(response.data.data)
+    }
+
+    useEffect(() => {
+        fetchSpecializations()
+    }, [])
 
 
     return (

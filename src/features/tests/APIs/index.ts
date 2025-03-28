@@ -115,6 +115,27 @@ export const deleteTestById = async (id: number) => {
     return await remove(`${testEndpoint}/${id}`)
 }
 
+export const importTest = async (formData: FormData) => {
+
+    try {
+
+        const response = await axiosInstance.post(`${testEndpoint}/import`, formData, {
+            headers: {
+                requiresAuth: true,
+                "Content-Type": "multipart/form-data"
+            }
+        })
+
+        return { status: 'success', data: response.data }
+
+    } catch (error) {
+
+        console.log(error)
+
+        return { status: 'error', error: 'Xảy ra lỗi' }
+    }
+}
+
 // ==================================
 //             TEST DRAFT
 // ==================================

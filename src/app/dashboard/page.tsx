@@ -245,7 +245,7 @@ const Dashboard = () => {
                                 >
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis dataKey="name" />
-                                    <YAxis />
+                                    <YAxis tickSize={1} allowDecimals={false} />
                                     <Tooltip />
                                     <Bar dataKey="appointments" fill="#8884d8">
                                         {counselingData.map((entry, index) => (

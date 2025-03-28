@@ -28,7 +28,6 @@ const ManageInvoiceListPage = () => {
     const searchParams = useSearchParams();
     const router = useRouter();
     const pageSize = 12;
-
     const fetchInvoices = async (filters: InvoiceQueryParams) => {
         setLoading(true);
         try {

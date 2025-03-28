@@ -3,7 +3,20 @@ import { Button, Divider } from '@heroui/react';
 import { Input } from "@heroui/input";
 import { Select, SelectItem } from "@heroui/select";
 import { Textarea } from "@heroui/input";
+import { Specialization } from "@/features/dashboard/schemas/statisticsSchema";
 
+
+interface CreateArticleFormProps {
+    form: {
+        title?: string;
+        introduction?: string;
+        specializationId?: number;
+    };
+    specializationArr: Specialization[];
+    onSubmit: () => void;
+    onFormInputChange: (field: string, value: any) => void;
+    onClearAllFields: () => void;
+}
 
 export default function CreateArticleForm({
     form,
@@ -11,9 +24,9 @@ export default function CreateArticleForm({
     onSubmit,
     onFormInputChange,
     onClearAllFields,
-}) {
+}: CreateArticleFormProps) {
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: { preventDefault: () => void; }) => {
         e.preventDefault()
         onSubmit()
     }
@@ -93,7 +106,7 @@ export default function CreateArticleForm({
                                     key={specialization.id}
                                     value={specialization.id}
                                 >
-                                    {specialization.title}
+                                    {specialization.name}
                                 </SelectItem>
                             ))}
                         </Select>

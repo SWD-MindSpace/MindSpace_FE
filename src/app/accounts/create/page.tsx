@@ -13,7 +13,8 @@ import { redirect } from 'next/navigation'
 
 export default function CreateAccountPage() {
 
-    const role = JSON.parse(localStorage.getItem('userInfo')).role;
+    const userInfo = localStorage.getItem('userInfo');
+    const role = userInfo ? JSON.parse(userInfo).role : null;
 
     if (role !== 'Admin' && role !== 'SchoolManager') {
         redirect('/login')
@@ -31,18 +32,18 @@ export default function CreateAccountPage() {
     const choosenRoleMenu = role === 'Admin' ? roleMenuForAdmin : roleMenuForSchoolManager;
 
 
-    const [file, setFile] = useState(null); // Store the uploaded file
+    const [file, setFile] = useState<File | null>(null); // Store the uploaded file
 
 
-    const handleFileUpload = (e) => {
-        const uploadedFile = e.target.files[0]; // Get the uploaded file
+    const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const uploadedFile = e.target.files?.[0]; // Get the uploaded file
         if (!uploadedFile) return;
 
         setFile(uploadedFile); // Save the file to state
     };
 
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         if (!file) {
@@ -55,7 +56,8 @@ export default function CreateAccountPage() {
         formData.append('file', file); // Append the file to the FormData object
 
         // Get the role name from the form
-        const roleName = e.target.role.value;
+        const form = e.target as HTMLFormElement;
+        const roleName = (form.elements.namedItem('role') as HTMLSelectElement).value;
 
         // Call the API to upload the file
         const response = await createNewAccountByImport(roleName, formData);
@@ -64,8 +66,8 @@ export default function CreateAccountPage() {
         } else {
             toast.error('Tạo tài khoản thất bại');
         }
-
-        e.target.reset()
+        form.reset();
+        (e.target as HTMLFormElement).reset();
     };
 
     return (
@@ -78,7 +80,7 @@ export default function CreateAccountPage() {
                     >
 
                         <CardHeader className='text-white bg-primary-blue'>
-                            <div className='w-full text-center text-md font-semibold uppercase'>BÀI TEST MỚI</div>
+                            <div className='w-full text-center text-md font-semibold uppercase'>TÀI KHOẢN MỚI</div>
                         </CardHeader>
 
                         <CardBody>
@@ -93,7 +95,7 @@ export default function CreateAccountPage() {
                                         {choosenRoleMenu.map((role) => (
                                             <SelectItem
                                                 key={role.key}
-                                                value={role.value}
+                                                value={role.key}
                                             >
                                                 {role.label}
                                             </SelectItem>

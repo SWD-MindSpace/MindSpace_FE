@@ -103,7 +103,7 @@ export const toggleAccountStatus = async (accountId: number) => {
     return put(`${baseUrlAccounts}/${accountId}/toggle-status`)
 }
 
-export const createNewAccountByImport = async (roleName, formData) => {
+export const createNewAccountByImport = async (roleName: any, formData: FormData) => {
 
     try {
 
