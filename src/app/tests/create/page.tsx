@@ -13,6 +13,8 @@ import DetailedQuestionModal from '@/features/tests/components/DetailedQuestionM
 import QuestionBank from '@/features/tests/components/QuestionBank';
 import CreateTestForm from '@/features/tests/components/CreateTestForm';
 import { TestCreateForm as TestCreatedForm } from '@/features/tests/schemas/testCreateFormSchema';
+import { getAllSpecializations } from '@/features/specializations/APIs';
+import { Specialization } from '@/features/dashboard/schemas/statisticsSchema';
 
 
 type QuestionOption = {
@@ -34,6 +36,7 @@ const LIMIT = 10
 export default function TestCreatePage() {
     const [questionBank, setQuestionBank] = useState<Question[] | null>(null)
     const [filteredQuestionBank, setFilteredQuestionBank] = useState<Question[] | null>(null)
+    const [specializationArr, setSpecializationArr] = useState<Specialization[]>([])
     const [totalPages, setTotalPages] = useState<number | null>(null)
     const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null)
     const [isAddingNewQuestion, setAddingNewQuestion] = useState<boolean>(false)
@@ -150,7 +153,7 @@ export default function TestCreatePage() {
     }
 
 
-    const getInitialTestDraftData = async () => {   // initial form can be a brand new OR incomplete form
+    const getInitialTestDraftData = async () => {
 
         const testDraft = localStorage.getItem('testDraft')
 
@@ -195,7 +198,7 @@ export default function TestCreatePage() {
 
 
 
-    const handleClickDeleteQuestion = async (questionId) => {
+    const handleClickDeleteQuestion = async (questionId: number) => {
         const newQuestionItems = form.questionItems.filter((item) => item.id !== questionId);
 
         await updateTestDraft({
@@ -206,7 +209,7 @@ export default function TestCreatePage() {
     }
 
 
-    const handleAddNewQuestionToForm = async (newQuestion) => {
+    const handleAddNewQuestionToForm = async (newQuestion: { id: number; content: string; questionOptions: { id: number; displayedText: string; }[]; }) => {
 
         await updateTestDraft({
             ...form,
@@ -244,27 +247,9 @@ export default function TestCreatePage() {
         }
     }
 
-
-    const specializationArr = [
-        { id: '1', title: 'Lâm sàng' },
-        { id: '2', title: 'Nhận thức' },
-        { id: '3', title: 'Thần kinh' },
-        { id: '4', title: 'Giáo dục' },
-        { id: '5', title: 'Phát triển' },
-        { id: '6', title: 'Pháp y' },
-        { id: '7', title: 'Sức khỏe' },
-        { id: '8', title: 'Thể thao' },
-        { id: '9', title: 'Công nghiệp - Tổ chức' },
-        { id: '10', title: 'Xã hội' },
-        { id: '11', title: 'Tư vấn' },
-        { id: '12', title: 'Thực nghiệm' },
-        { id: '13', title: 'Tích cực' },
-        { id: '14', title: 'Phục hồi' },
-        { id: '15', title: 'Trường học' },
-    ]
-
-    const handleUploadQuestions = (e) => {
-        console.log(e.target)
+    const fetchSpecializations = async () => {
+        const response = await getAllSpecializations();
+        setSpecializationArr(response.data.data)
     }
 
     const openNewQuestionModal = () => {
@@ -278,6 +263,10 @@ export default function TestCreatePage() {
 
     useEffect(() => {
         getInitialTestDraftData()
+    }, [])
+
+    useEffect(() => {
+        fetchSpecializations()
     }, [])
 
 

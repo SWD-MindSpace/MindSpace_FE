@@ -10,14 +10,17 @@ import { toast } from 'react-toastify'
 import NewSectionModal from '@/features/resources/blogs/components/NewSectionModal';
 import CreateBlogForm from '@/features/resources/blogs/components/CreateBlogForm'
 import ImageUpload from '@/features/resources/blogs/components/ImageUpload';
+import { Specialization } from '@/features/dashboard/schemas/statisticsSchema';
+import { getAllSpecializations } from '@/features/specializations/APIs';
 
 // interface Blog Form
 
 export default function BlogCreatePage() {
     // const [form, setForm] = useState<TestCreatedForm | null>(null)
-    const [form, setForm] = useState(null)
+    const [form, setForm] = useState<{ sections: any[] } | null>({ sections: [] })
     const [isAddingNewSection, setAddingNewSection] = useState<boolean>(false)
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const [specializationArr, setSpecializationArr] = useState<Specialization[]>([])
 
 
     const getInitialBlogDraftData = async () => {   // initial form can be a brand new OR incomplete form
@@ -56,11 +59,11 @@ export default function BlogCreatePage() {
     }, 0)
 
 
-    const handleAddNewContentToForm = async (newContent) => {
+    const handleAddNewContentToForm = async (newContent: any) => {
 
         await updateBlogDraft({
             ...form,
-            sections: [...form.sections, newContent]
+            sections: [...(form?.sections || []), newContent]
         })
 
         await getInitialBlogDraftData()
@@ -69,8 +72,8 @@ export default function BlogCreatePage() {
     }
 
 
-    const handleClickDeleteContent = async (contentId) => {
-        const updatedSections = form.sections.filter((item) => item.id !== contentId);
+    const handleClickDeleteContent = async (contentId: any) => {
+        const updatedSections = form?.sections?.filter((item) => item.id !== contentId) || [];
 
         await updateBlogDraft({
             ...form,
@@ -81,7 +84,7 @@ export default function BlogCreatePage() {
 
 
     const handleClearAllFields = async () => {
-        const blogDraftId = JSON.parse(localStorage.getItem('blogDraft')).blogDraftId
+        const blogDraftId = JSON.parse(localStorage.getItem('blogDraft') || '{}').blogDraftId
         await deleteBlogDraftById(blogDraftId)
         window.location.reload()
     }
@@ -99,10 +102,10 @@ export default function BlogCreatePage() {
 
         await updateBlogDraft({
             ...form,
-            schoolManagerId: JSON.parse(localStorage.getItem('userInfo')).userId
+            schoolManagerId: JSON.parse(localStorage.getItem('userInfo') || '{}').userId
         })
 
-        const blogDraftId = JSON.parse(localStorage.getItem('blogDraft')).blogDraftId
+        const blogDraftId = JSON.parse(localStorage.getItem('blogDraft') || '{}').blogDraftId
 
         console.log('handleSubmitForm: ', blogDraftId)
 
@@ -118,23 +121,14 @@ export default function BlogCreatePage() {
     }
 
 
-    const specializationArr = [
-        { id: '1', title: 'Lâm sàng' },
-        { id: '2', title: 'Nhận thức' },
-        { id: '3', title: 'Thần kinh' },
-        { id: '4', title: 'Giáo dục' },
-        { id: '5', title: 'Phát triển' },
-        { id: '6', title: 'Pháp y' },
-        { id: '7', title: 'Sức khỏe' },
-        { id: '8', title: 'Thể thao' },
-        { id: '9', title: 'Công nghiệp - Tổ chức' },
-        { id: '10', title: 'Xã hội' },
-        { id: '11', title: 'Tư vấn' },
-        { id: '12', title: 'Thực nghiệm' },
-        { id: '13', title: 'Tích cực' },
-        { id: '14', title: 'Phục hồi' },
-        { id: '15', title: 'Trường học' },
-    ]
+    const fetchSpecializations = async () => {
+        const response = await getAllSpecializations();
+        setSpecializationArr(response.data.data)
+    }
+
+    useEffect(() => {
+        fetchSpecializations()
+    }, [])
 
     useEffect(() => {
         getInitialBlogDraftData()

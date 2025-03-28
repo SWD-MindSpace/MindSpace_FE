@@ -4,6 +4,7 @@ import { Input } from "@heroui/input";
 import { Select, SelectItem } from "@heroui/select";
 import { Textarea } from "@heroui/input";
 import { BsTrash3 } from "react-icons/bs";
+import { Specialization } from "@/features/dashboard/schemas/statisticsSchema";
 
 
 interface CreateTestFormProps {
@@ -17,7 +18,7 @@ interface CreateTestFormProps {
         price?: number;
         questionItems: { id: number; content: string; isNewQuestion: boolean }[];
     };
-    specializationArr: { id: number; title: string }[];
+    specializationArr: Specialization[];
     onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
     onFormInputChange: (field: string, value: any) => void;
     onClearAllFields: () => void;
@@ -162,7 +163,7 @@ export default function CreateTestForm({
                                     key={specialization.id}
                                     value={specialization.id}
                                 >
-                                    {specialization.title}
+                                    {specialization.name}
                                 </SelectItem>
                             ))}
                         </Select>
@@ -206,7 +207,7 @@ export default function CreateTestForm({
                             type='text'
                             isRequired
                             errorMessage={'Bắt buộc nhập giá'}
-                            defaultValue={form?.price || ''}
+                            defaultValue={form?.price !== undefined ? String(form.price) : ''}
                             onValueChange={(value) => onFormInputChange('price', Number(value))}
                         />
                     </div>
