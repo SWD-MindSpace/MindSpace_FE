@@ -142,6 +142,7 @@ export default function DetailedPsychologistForm({ form }) {
                             id="sessionPrice"
                             type='text'
                             defaultValue={formatPrice(form?.sessionPrice) || ''}
+
                         />
                     </div>
 

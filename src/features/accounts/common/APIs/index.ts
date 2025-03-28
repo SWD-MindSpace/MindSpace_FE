@@ -58,6 +58,29 @@ export const getAllAccounts = async (searchParams: AccountQueryParams) => {
 }
 
 
+export const getProfileById = async (id: Number) => {
+
+    try {
+
+        const response = await axiosInstance.get(`/api/v1/identities/profile/${id}`, {
+            headers: {
+                requiresAuth: true
+            }
+        })    
+
+        console.log(response)
+
+        return { status: 'success', data: response.data }
+
+    } catch (error) {
+
+        console.log(error)
+
+        return { status: 'error', error: 'Xảy ra lỗi' }
+    }
+}
+
+
 export const getAllStudents = async (searchParams: AccountQueryParams) => {
     const queryString = getQueryString(searchParams)
     console.log(queryString)
