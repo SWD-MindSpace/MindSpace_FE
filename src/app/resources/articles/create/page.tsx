@@ -15,11 +15,22 @@ export default function ArticleCreatePage() {
     const [form, setForm] = useState({
         articleUrl: 'https://www.annualreviews.org/content/journals/10.1146/annurev.psych.55.090902.141927',
         thumbnailUrl: 'https://placehold.co/600x400',
-        schoolManagerId: JSON.parse(localStorage.getItem('userInfo') || '{}').userId
+        schoolManagerId: '' // Initialize with empty string
     })
     const [thumbnailUrl, setThumbnailUrl] = useState('https://placehold.co/600x400')
     const [specializationArr, setSpecializationArr] = useState<Specialization[]>([])
 
+    // Set schoolManagerId from localStorage on component mount
+    useEffect(() => {
+        const userInfo = localStorage.getItem('userInfo')
+        if (userInfo) {
+            const { userId } = JSON.parse(userInfo)
+            setForm(prev => ({
+                ...prev,
+                schoolManagerId: userId
+            }))
+        }
+    }, [])
 
     const handleFormInputChange = (key: string, value: any) => {
         setForm({
@@ -33,14 +44,16 @@ export default function ArticleCreatePage() {
     }
 
     const handleClearAllFields = async () => {
+        const userInfo = localStorage.getItem('userInfo')
+        const userId = userInfo ? JSON.parse(userInfo).userId : ''
+
         setForm({
             articleUrl: 'https://www.annualreviews.org/content/journals/10.1146/annurev.psych.55.090902.141927',
             thumbnailUrl: 'https://placehold.co/600x400',
-            schoolManagerId: JSON.parse(localStorage.getItem('userInfo') || '{}').userId
+            schoolManagerId: userId
         })
         setThumbnailUrl('https://placehold.co/600x400')
     }
-
 
     const handleSubmitForm = async () => {
         const newArticle = {
@@ -58,7 +71,6 @@ export default function ArticleCreatePage() {
         }
     }
 
-
     const fetchSpecializations = async () => {
         const response = await getAllSpecializations();
         setSpecializationArr(response.data.data)
@@ -67,7 +79,6 @@ export default function ArticleCreatePage() {
     useEffect(() => {
         fetchSpecializations()
     }, [])
-
 
     return (
         <div className='flex flex-row h-screen gap-x-5'>
