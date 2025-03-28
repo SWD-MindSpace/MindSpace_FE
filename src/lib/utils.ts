@@ -8,7 +8,6 @@ export const truncateText = (text: string) => {
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
-
 export const formatDate = (dateInput: string | Date | null): string => {
     if (!dateInput) return 'N/A';
 
@@ -27,3 +26,16 @@ export const formatDate = (dateInput: string | Date | null): string => {
         year: 'numeric'
     }).replace(/\//g, '-');
 };
+
+export const formatDateForInput = (date: Date): string => {
+    const formattedDate = new Date(date);
+    const day = String(formattedDate.getDate()).padStart(2, '0');
+    const month = String(formattedDate.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const year = formattedDate.getFullYear();
+
+    return `${day}/${month}/${year}`;
+}
+
+export const formatPrice = (price: number): string => {
+    return price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
+}

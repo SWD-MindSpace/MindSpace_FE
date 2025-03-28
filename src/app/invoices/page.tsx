@@ -7,6 +7,7 @@ import InvoiceFilter from '@/features/invoices/components/InvoiceFilter';
 import { getInvoiceList } from '@/features/invoices/APIs';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Pagination from '@/components/list/Pagination';
+import { formatPrice } from '@/lib/utils';
 
 const ManageInvoiceListPage = () => {
     const [invoices, setInvoices] = useState<Invoice[]>([]);
@@ -115,7 +116,7 @@ const ManageInvoiceListPage = () => {
                             {invoices.map((invoice, index) => (
                                 <TableRow key={index}>
                                     <TableCell>{invoice.appointmentId}</TableCell>
-                                    <TableCell>{invoice.amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</TableCell>
+                                    <TableCell>{formatPrice(invoice.amount)}</TableCell>
                                     <TableCell>{invoice.transactionCode}</TableCell>
                                     <TableCell>{invoice.provider}</TableCell>
                                     <TableCell>{invoice.paymentMethod}</TableCell>
