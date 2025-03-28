@@ -11,46 +11,79 @@
   Josh's Custom CSS Reset
   https://www.joshwcomeau.com/css/custom-css-reset/
 */
-*, *::before, *::after {
-    box-sizing: border-box;
-  }
-  * {
-    margin: 0;
-  }
-  body {
-    line-height: calc(1em + 0.5rem);
-    -webkit-font-smoothing: antialiased;
-    color: var(--black);
-  }
-  img, picture, video, canvas, svg {
-    display: block;
-    max-width: 100%;
-  }
-  input, button, textarea, select {
-    font: inherit;
-  }
-  p, h1, h2, h3, h4, h5, h6 {
-    overflow-wrap: break-word;
-  }
-  p {
-    text-wrap: pretty;
-  }
-  h1, h2, h3, h4, h5, h6 {
-    text-wrap: balance;
-  }
-  #root, #__next {
-    isolation: isolate;
-  }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+body {
+  line-height: calc(1em + 0.5rem);
+  -webkit-font-smoothing: antialiased;
+  color: var(--black);
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-wrap: balance;
+}
+
+#root,
+#__next {
+  isolation: isolate;
+}
 
 
 /*
     CSS Global Variables  
 */
 :root {
-    --primary-blue: #0072CE;
-    --secondary-blue: #002D72;
-    --white: #FFFFFF;
-    --black: #272727;
-    --txt-gray: #727272;
-    --bg-gray: #E4E7EF;
+  --primary-blue: #0072CE;
+  --secondary-blue: #002D72;
+  --white: #FFFFFF;
+  --black: #272727;
+  --txt-gray: #727272;
+  --bg-gray: #E4E7EF;
+}
+
+nextjs-portal {
+  display: none;
 }
