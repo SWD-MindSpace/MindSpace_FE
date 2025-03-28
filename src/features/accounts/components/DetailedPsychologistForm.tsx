@@ -2,10 +2,10 @@ import { Card, CardHeader, CardBody } from "@heroui/card";
 import { Divider } from '@heroui/react';
 import { Input } from "@heroui/input";
 import { Textarea } from "@heroui/input";
-import { formatDateForInput } from "@/lib/utils";
+import { formatDateForInput, formatPrice } from "@/lib/utils";
 
 export default function DetailedPsychologistForm({ form }) {
-    
+
     return (
         <form className='w-full text-center'>
             <Card
@@ -141,7 +141,8 @@ export default function DetailedPsychologistForm({ form }) {
                             size='lg'
                             id="sessionPrice"
                             type='text'
-                            defaultValue={form?.sessionPrice || ''}
+                            defaultValue={formatPrice(form?.sessionPrice) || ''}
+
                         />
                     </div>
 
