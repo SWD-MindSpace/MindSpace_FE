@@ -173,6 +173,7 @@ export default function TestCreatePage() {
 
         const result = await getTestDraftById(testDraftId)
         if (result.status === 'success') {
+            console.log(result.data)
             setForm(result.data)
         } else {
             toast.error(result?.error)

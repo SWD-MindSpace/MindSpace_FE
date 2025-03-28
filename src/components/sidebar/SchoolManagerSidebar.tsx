@@ -27,7 +27,7 @@ export default function SchoolManagerSidebar({ itemClasses, subLinkStyle, mainLi
                 </AccordionItem>
                 <AccordionItem key="2" aria-label="Manage Psychological Tests" title="Quản lý bài test">
                     <div className='flex flex-col'>
-                        <Link href='/tests/create' className={subLinkStyle}>Tạo bài test mới</Link>
+                        <Link href='/tests/create-mode' className={subLinkStyle}>Tạo bài test mới</Link>
                         <Link href='/tests' className={subLinkStyle}>Xem tất cả bài test</Link>
                         {/* <Link href='/questions' className={subLinkStyle}>Xem tất cả câu hỏi</Link> */}
                     </div>
