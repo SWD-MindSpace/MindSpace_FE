@@ -12,7 +12,7 @@ export default function AdminSidebar({ itemClasses, subLinkStyle, mainLinkStyle 
     return (
         <div>
             <div className={mainLinkStyle}>
-                <Link href="/dashboard">Dashboard</Link>
+                <Link href="/dashboard">Thống kê</Link>
             </div>
             <Accordion
                 selectionMode="multiple"

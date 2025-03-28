@@ -129,7 +129,7 @@ export default function StudentListPage() {
                     tableCenterColumns={ACCOUNT_CENTER_COLUMNS}
                     searchParams={searchParams}
                     totalPages={totalPages as number | null}
-                    createHref='/students/create'
+                    createHref='/accounts/create'
                     searchBoxProps={searchBoxProps}
                     totalItems={totalItems}
                     renderCell={renderCell}

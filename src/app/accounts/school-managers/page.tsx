@@ -123,7 +123,7 @@ export default function SchoolManagerListPage() {
                     tableCenterColumns={ACCOUNT_CENTER_COLUMNS}
                     searchParams={searchParams}
                     totalPages={totalPages as number | null}
-                    createHref='/school-managers/create'
+                    createHref='/accounts/create'
                     searchBoxProps={searchBoxProps}
                     totalItems={totalItems}
                     renderCell={renderCell}
