@@ -26,3 +26,11 @@ export const ROLE_ID = {
     PARENT: 5
 }
 
+export const ROLE_NAME = {
+    STUDENT: "Student",
+    ADMIN: "Admin",
+    PSYCHOLOGIST: "Psychologist",
+    SCHOOL_MANAGER: "SchoolManager",
+    PARENT: "Parent"
+}
+
