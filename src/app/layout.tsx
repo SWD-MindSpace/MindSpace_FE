@@ -6,7 +6,6 @@ import Providers from "@/components/provider/Providers";
 import SideBar from "@/components/SideBar";
 import Header from "@/components/Header";
 import { usePathname } from "next/navigation";
-import { redirect } from "next/navigation";
 
 
 // export const metadata: Metadata = {
@@ -22,12 +21,6 @@ export default function RootLayout({
     const pathname = usePathname()
 
     const isLogginPage = pathname === '/login'
-
-    const isLoggedIn = localStorage.getItem('userInfo')
-
-    if (!isLogginPage && !isLoggedIn) {
-        redirect('/login')
-    }
 
     return (
         <html lang="en">

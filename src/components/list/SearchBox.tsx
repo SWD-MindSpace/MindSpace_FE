@@ -17,7 +17,7 @@ export default function SearchBox({ searchParams, searchBoxProps, onInputChange 
         <Input
             variant="underlined"
             isClearable
-            className="w-full"
+            className="w-full sm:max-w-[30%] mb-10"
             placeholder={placeholder}
             startContent={<SearchIcon />}
             defaultValue={searchParams.get(searchField) || ''}
