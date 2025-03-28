@@ -7,7 +7,7 @@ export const truncateText = (text: string) => {
 }
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
-
+}
 export const formatDate = (dateInput: string | Date | null): string => {
     if (!dateInput) return 'N/A';
 
