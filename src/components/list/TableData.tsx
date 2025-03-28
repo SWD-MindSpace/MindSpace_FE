@@ -37,7 +37,7 @@ export default function TableData({ columns, data, renderCell, centerColumns }: 
                 color="primary"
                 isCompact
                 classNames={tableStyles}
-                onRowAction={(key) => window.open(`${pathname}/detail/${key}`, '_blank')}
+                onRowAction={() => window.open(`${pathname}/detail/id`, '_blank')}
             >
                 <TableHeader columns={columns}>
                     {(columns) => (

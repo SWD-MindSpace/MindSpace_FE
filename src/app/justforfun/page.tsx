@@ -2,33 +2,10 @@
 
 import { Card, CardHeader, CardBody, Image } from "@heroui/react";
 
-import { CldUploadButton, CloudinaryUploadWidgetResults } from 'next-cloudinary';
-
-const cloudPresetName = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME;
-
-
-
 export default function JustForFun() {
-
-    const onSuccessfulUpload = (result: CloudinaryUploadWidgetResults) => {
-        console.log('onSuccessfulUpload: ', result)
-    }
-
     const text = 'Cuộc sống là một hành trình đầy thử thách, nhưng cũng không thiếu những khoảnh khắc đẹp đẽ và đáng nhớ. Mỗi ngày trôi qua, ta học được nhiều điều mới mẻ, từ những người xung quanh đến chính bản thân mình. Quan trọng nhất là biết trân trọng những giây phút hiện tại và luôn cố gắng vươn lên, dù cho những khó khăn có thể làm ta cảm thấy mệt mỏi. Hãy sống với niềm tin và hy vọng, vì tương lai luôn rộng mở cho những ai dám ước mơ.'
     return (
         <>
-            <div className="flex items-center justify-center ">
-                <CldUploadButton
-                    onSuccess={onSuccessfulUpload}
-                    uploadPreset={cloudPresetName}
-                    className="bg-green-400 py-2 px-3 rounded border mt-4 text-white
-                                    hover:bg-green-500 transition ease-in-out delay-200"
-                >
-                    <span className="text-2xl">Upload Images</span>
-                </CldUploadButton>
-            </div>
-
-
             <div className="grid grid-cols-1 w-screen">
                 <div className="h-28 bg-primary-blue"></div>
                 <div className="h-28 bg-secondary-blue"></div>
@@ -69,8 +46,6 @@ export default function JustForFun() {
                     </Card>
                 </div>
             </div >
-
-
         </>
 
     )

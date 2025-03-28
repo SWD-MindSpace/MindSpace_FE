@@ -8,7 +8,6 @@ export const testTableData = z.object({
     description: z.string(),
     questionCount: z.number(),
     price: z.number(),
-    testStatus: z.string(),
 })
 
 export type TestTableData = z.infer<typeof testTableData>

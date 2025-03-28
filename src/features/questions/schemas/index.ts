@@ -5,5 +5,4 @@ export const questionTableData = z.object({
     id: z.number()
 })
 
-
 export type QuestionTableData = z.infer<typeof questionTableData>

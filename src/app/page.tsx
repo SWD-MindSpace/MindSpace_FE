@@ -1,15 +1,20 @@
-'use client'
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 
 
 export default function Home() {
-    const router = useRouter();
+    return (
+        // <div className="">
+        //     Muon test gi thi di vao day nha:
+        //     <Link
+        //         href='/justforfun'
+        //         className="font-semibold text-primary-blue"
 
-    useEffect(() => {
-        // Redirect to the dashboard after the component mounts
-        router.push('/dashboard')
-    }, [router])
+        //     >
+        //         localhost:3000/justforfun
+        //     </Link>
+        // </div>
+        // <List />
+        <div>Home Page</div>
 
+    );
 }
