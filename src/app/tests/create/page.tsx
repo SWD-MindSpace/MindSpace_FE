@@ -237,12 +237,11 @@ export default function TestCreatePage() {
         console.log('handleSubmitForm: ', testDraftId)
 
         const result = await createManualForm(testDraftId)
-        console.log(result)
         // upon successful submission
         if (result.status === 'success') {
             localStorage.removeItem('testDraft')
             console.log('testResponseId: ', result.data)
-            // window.location.replace(`detail/${result.data}`)
+            window.location.replace(`detail/${result.data}`)
         } else {
             toast.error(result.error)
         }

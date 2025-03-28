@@ -67,11 +67,7 @@ export const createManualForm = async (testDraftId: string) => {
             }
         })
 
-        console.log(response)
-
         const locationUrl = response.headers['location']
-        console.log(locationUrl)
-
         if (!locationUrl) throw new Error('Location header not found')
 
         const testResponseId = locationUrl.split('/').pop()
@@ -126,7 +122,11 @@ export const importTest = async (formData: FormData) => {
             }
         })
 
-        return { status: 'success', data: response.data }
+        return {
+            status: 'success',
+            data: response.data,
+            headers: response.headers
+        }
 
     } catch (error) {
 
