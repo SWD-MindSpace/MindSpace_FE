@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { useSearchParams, useRouter, usePathname } from 'next/navigation'
-import { getAllQuestions, getQuestionById } from '@/features/questions/APIs';
+import { getAllQuestions, getQuestionById, QuestionQueryParams } from '@/features/questions/APIs';
 import { deleteTestDraftById, getTestDraftById, updateTestDraft, createManualForm } from '@/features/tests/APIs';
 import { useDebouncedCallback } from 'use-debounce';
 import { v4 as uuidv4 } from 'uuid';
@@ -24,7 +24,8 @@ type QuestionOption = {
 export type Question = {
     id: number
     content: string
-    questionOptions: QuestionOption[]
+    questionOptions?: QuestionOption[]
+    isNewQuestion?: boolean
 }
 
 
@@ -33,7 +34,7 @@ const LIMIT = 10
 export default function TestCreatePage() {
     const [questionBank, setQuestionBank] = useState<Question[] | null>(null)
     const [filteredQuestionBank, setFilteredQuestionBank] = useState<Question[] | null>(null)
-    const [totalPages, setTotalPages] = useState<number | null>(null)   // pagination for question bank
+    const [totalPages, setTotalPages] = useState<number | null>(null)
     const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null)
     const [isAddingNewQuestion, setAddingNewQuestion] = useState<boolean>(false)
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -67,12 +68,12 @@ export default function TestCreatePage() {
 
 
     const filterQuestionBank = () => {
-        if (form.questionItems.length > 0) {
+        if (form && form.questionItems.length > 0) {
             const questionItemsIds = form.questionItems.map((item) => item.id)
             const filterItems = questionBank?.filter((item) => {
                 return !questionItemsIds.includes(item.id)
             })
-            setFilteredQuestionBank(filterItems)
+            setFilteredQuestionBank(filterItems || null)
         }
         else {
             setFilteredQuestionBank(questionBank)
@@ -98,11 +99,21 @@ export default function TestCreatePage() {
 
 
 
-    const fetchSelectedQuestion = async (isNewQuestion, id) => {
+    const fetchSelectedQuestion = async (isNewQuestion: any, id: number) => {
 
         if (isNewQuestion) {
             const foundQuestion = form?.questionItems.find((question) => question.id === id)
-            setSelectedQuestion(foundQuestion)
+            setSelectedQuestion(
+                foundQuestion
+                    ? {
+                        ...foundQuestion,
+                        questionOptions: foundQuestion.questionOptions.map((option) => ({
+                            ...option,
+                            questionId: foundQuestion.id,
+                        })),
+                    }
+                    : null
+            )
 
         } else { // existing questions in db
             const result = await getQuestionById(id)
@@ -126,7 +137,7 @@ export default function TestCreatePage() {
         await updateTestDraft({
             ...form,
             questionItems: [
-                ...form.questionItems,
+                ...(form?.questionItems || []),
                 {
                     id: questionId,
                     content,
@@ -176,7 +187,8 @@ export default function TestCreatePage() {
 
 
     const handleClearAllFields = async () => {
-        const testDraftId = JSON.parse(localStorage.getItem('testDraft')).testDraftId
+        const testDraft = localStorage.getItem('testDraft');
+        const testDraftId = testDraft ? JSON.parse(testDraft).testDraftId : null;
         await deleteTestDraftById(testDraftId)
         window.location.reload()
     }
@@ -209,7 +221,7 @@ export default function TestCreatePage() {
 
 
     const handleSubmitForm = async () => {
-
+        console.log("Handling submit form")
         await updateTestDraft({
             ...form,
             questionCount: form.questionItems.length,
@@ -221,11 +233,12 @@ export default function TestCreatePage() {
         console.log('handleSubmitForm: ', testDraftId)
 
         const result = await createManualForm(testDraftId)
-
+        console.log(result)
         // upon successful submission
         if (result.status === 'success') {
             localStorage.removeItem('testDraft')
-            window.location.replace(`detail/${result.data}`)
+            console.log('testResponseId: ', result.data)
+            // window.location.replace(`detail/${result.data}`)
         } else {
             toast.error(result.error)
         }

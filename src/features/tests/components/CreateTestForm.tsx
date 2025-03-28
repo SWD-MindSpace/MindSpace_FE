@@ -6,6 +6,25 @@ import { Textarea } from "@heroui/input";
 import { BsTrash3 } from "react-icons/bs";
 
 
+interface CreateTestFormProps {
+    form: {
+        title?: string;
+        description?: string;
+        testCode?: string;
+        testCategoryId?: number;
+        specializationId?: number;
+        targetUser?: number;
+        price?: number;
+        questionItems: { id: number; content: string; isNewQuestion: boolean }[];
+    };
+    specializationArr: { id: number; title: string }[];
+    onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+    onFormInputChange: (field: string, value: any) => void;
+    onClearAllFields: () => void;
+    onClickQuestion: (isNewQuestion: boolean, id: number) => void;
+    onClickDeleteQuestion: (id: number) => void;
+}
+
 export default function CreateTestForm({
     form,
     specializationArr,
@@ -14,7 +33,7 @@ export default function CreateTestForm({
     onClearAllFields,
     onClickQuestion,
     onClickDeleteQuestion
-}) {
+}: CreateTestFormProps) {
 
     const questionInFormStyles = {
         base: 'cursor-pointer',

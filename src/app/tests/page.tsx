@@ -8,7 +8,7 @@ import { toast } from 'react-toastify'
 import { truncateText } from '@/lib/utils'
 import { TestTableData } from '@/features/tests/schemas/testTableDataSchema'
 
-import { getAllTests, TestQueryParams, toggleTestStatus } from '@/features/tests/APIs'
+import { deleteTestById, getAllTests, TestQueryParams, toggleTestStatus } from '@/features/tests/APIs'
 import ListActions from '@/components/list/ListActions'
 import ListLayout from '@/components/ListLayout'
 
@@ -50,6 +50,17 @@ export default function TestListPage() {
             fetchData();
         } catch (error) {
             toast.error('Có lỗi xảy ra');
+        }
+    }
+
+    const handleDelete = async (id: number) => {
+        try {
+            const result = await deleteTestById(id);
+            console.log(result);
+            fetchData();
+            toast.success("Xóa bài kiểm tra thành công");
+        } catch (error) {
+            toast.error("Không thể xóa bài kiểm tra này vì đã có người dùng đã tham gia");
         }
     }
 
@@ -104,13 +115,15 @@ export default function TestListPage() {
                 return (
                     <ListActions
                         id={testData.id}
+                        entityName='Bài kiểm tra'
                         onToggleStatus={() => handleToggleStatus(testData.id)}
+                        onDeleteItem={() => handleDelete(testData.id)}
                     />
                 )
             default:
                 return <span>{cellValue}</span>
         }
-    }, [handleToggleStatus])
+    }, [handleToggleStatus, handleDelete])
 
     const searchBoxProps = {
         placeholder: 'Tìm kiếm tiêu đề',
