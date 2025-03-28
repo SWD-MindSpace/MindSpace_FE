@@ -207,7 +207,7 @@ export default function CreateTestForm({
                             type='text'
                             isRequired
                             errorMessage={'Bắt buộc nhập giá'}
-                            defaultValue={form?.price !== undefined ? String(form.price) : ''}
+                            defaultValue={form?.price !== undefined && form?.price != null ? String(form.price) : ''}
                             onValueChange={(value) => onFormInputChange('price', Number(value))}
                         />
                     </div>
