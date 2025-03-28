@@ -105,7 +105,7 @@ export default function PsychologistListPage() {
                     tableCenterColumns={ACCOUNT_CENTER_COLUMNS}
                     searchParams={searchParams}
                     totalPages={totalPages as number | null}
-                    createHref='/psychologists/create'
+                    createHref='/accounts/create'
                     searchBoxProps={searchBoxProps}
                     totalItems={totalItems}
                     renderCell={renderCell}

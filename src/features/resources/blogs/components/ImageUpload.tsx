@@ -10,6 +10,12 @@ export default function ImageUpload({ form, onFormInputChange }) {
         onFormInputChange('thumbnailUrl', result.info.secure_url)
     }
 
+    const handleClickButton = (e) => {
+        console.log('button clicked')
+        console.log(e)
+        return
+    }
+
     return (
         <Card
             className='-z-0'
@@ -27,10 +33,11 @@ export default function ImageUpload({ form, onFormInputChange }) {
                 />
 
                 <CldUploadButton
+                    onUploadAddedAction={handleClickButton}
                     onSuccess={onSuccessfulUpload}
                     uploadPreset={cloudPresetName}
                     className="bg-blue-500 py-2 px-3 rounded border mt-4 text-white
-                                                    hover:bg-blue-600 transition ease-in-out delay-200"
+                hover:bg-blue-600 transition ease-in-out delay-200"
                 >
                     <span className="text-center text-md font-semibold uppercase">Tải hình</span>
                 </CldUploadButton>
