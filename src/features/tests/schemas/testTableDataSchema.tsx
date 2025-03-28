@@ -7,7 +7,6 @@ export const testTableData = z.object({
     targetUser: z.string(),
     description: z.string(),
     questionCount: z.number(),
-    price: z.number(),
     testStatus: z.string(),
 })
 

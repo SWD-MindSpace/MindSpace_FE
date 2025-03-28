@@ -50,13 +50,13 @@ const TestCreationSelection = () => {
                                         ? 'border-blue-500 bg-blue-50 shadow-lg'
                                         : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50'}
               `}
-                                onClick={() => handleMethodSelect(method.id)}
                             >
                                 <h3 className="text-lg font-semibold mb-2">{method.title}</h3>
                                 <p className="text-gray-600 mb-4">{method.description}</p>
                                 <Button
                                     color={selectedMethod === method.id ? 'primary' : 'secondary'}
                                     className="w-full"
+                                    onPress={() => handleMethodSelect(method.id)}
                                 >
                                     Chọn
                                 </Button>

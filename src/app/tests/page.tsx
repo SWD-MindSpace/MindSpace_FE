@@ -96,8 +96,6 @@ export default function TestListPage() {
                 return <div>{truncateText(cellValue as string)}</div>
             case "questionCount":
                 return <div>{cellValue as number}</div>
-            case "price":
-                return <div>{cellValue as number}</div>
             case "testStatus":
                 return (
                     <span

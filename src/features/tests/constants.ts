@@ -5,7 +5,6 @@ export const TEST_LIST_COLUMNS = [
     { name: "ĐỐI TƯỢNG", uid: "targetUser" },
     { name: "MÔ TẢ", uid: "description" },
     { name: "CÂU HỎI", uid: "questionCount" },
-    { name: "GIÁ", uid: "price" },
     { name: "TRẠNG THÁI", uid: "testStatus" },
     { name: "THÊM", uid: "actions" },
 ];
@@ -15,7 +14,6 @@ export const TEST_CENTER_COLUMNS = [
     'testCode',
     'questionCount',
     'targetUser',
-    'price',
     'actions'
 ]
 
