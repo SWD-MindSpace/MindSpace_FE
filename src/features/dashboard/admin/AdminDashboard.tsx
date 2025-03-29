@@ -40,7 +40,7 @@ import { formatPrice } from '@/lib/utils';
 export default function AdminDashboard() {
     const today = new Date();
     const defaultStartDate = new Date(today);
-    defaultStartDate.setDate(today.getDate() - 365 * 2);
+    defaultStartDate.setDate(today.getDate() - 365 * 10);
 
     const formatDateForInput = (date: Date): string => {
         const day = String(date.getDate()).padStart(2, '0');

@@ -126,9 +126,9 @@ export default function TestImportPage() {
 
             // Navigate to test details page
             if (testId) {
-                router.push(`/test/details/${testId}`);
+                router.push(`/tests/detail/${testId}`);
             } else {
-                router.push('/test');
+                router.push('/tests');
             }
         } catch (error) {
             console.error('Import error', error);

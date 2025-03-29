@@ -174,22 +174,7 @@ export default function DetailedPsychologistForm({ form }) {
                             size='lg'
                             id="specialization"
                             type='text'
-                            defaultValue={form.specialization}
-                        />
-                    </div>
-
-
-                    {/* INTRODUCTION */}
-                    <div className='flex flex-row items-start justify-start p-3 gap-x-5'>
-                        <label aria-label="introduction" className='w-[20%] font-semibold' htmlFor="introduction">Giới thiệu</label>
-                        <Textarea
-                            isReadOnly
-                            aria-label="introduction"
-                            className='w-[80%]'
-                            radius='sm'
-                            size='lg'
-                            type='text'
-                            defaultValue={form?.introduction || ''}
+                            defaultValue={form.specialization.name || ''}
                         />
                     </div>
 

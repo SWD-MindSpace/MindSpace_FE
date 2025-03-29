@@ -143,7 +143,7 @@ export const importTest = async (formData: FormData) => {
 export const getTestDraftById = async (id: string) => {
 
     try {
-        const response = await axiosInstance.get(`/api/v1/testdraft/${id}`, {
+        const response = await axiosInstance.get(`/api/v1/test-draft/${id}`, {
             headers: {
                 requiresAuth: true
             }
@@ -162,7 +162,7 @@ export const getTestDraftById = async (id: string) => {
 export const updateTestDraft = async (updatedForm: TestCreateForm) => {
 
     try {
-        await axiosInstance.post(`/api/v1/testdraft`, updatedForm,
+        await axiosInstance.post(`/api/v1/test-draft`, updatedForm,
             {
                 headers: {
                     requiresAuth: true
@@ -181,7 +181,7 @@ export const updateTestDraft = async (updatedForm: TestCreateForm) => {
 export const deleteTestDraftById = async (id: number) => {
 
     try {
-        await axiosInstance.delete(`/api/v1/testdraft/${id}`, {
+        await axiosInstance.delete(`/api/v1/test-draft/${id}`, {
             headers: {
                 requiresAuth: true
             }
