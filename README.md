@@ -30,7 +30,7 @@
 </ol>
 
 
-
+<a id="intro"></a>
 ## 0. Introduction
 The increasing concern for students' mental health in Vietnamese schools highlights the need for a structured psychological support system. 
 Currently, many schools lack a standardized approach to managing students' well-being. 
@@ -119,29 +119,17 @@ To get a local copy of the project up and running, follow these steps.
 - SQL Server
 - Redis
 
-Clone the repository:
-
+Clone the FE repository:
 ```bash
-git clone https://github.com/SWD-MindSpace/MindSpace_BE.git
-
-cd MindSpace_BE
+git clone https://github.com/SWD-MindSpace/MindSpace_FE_SchoolManager_Admin.git
 ```
 
-Configure the database
+Start the project in VSCode
 ```
-Add appsettings.json to resources
-```
-
-Build the project
-```
-dotnet build
+npm run dev-https
 ```
 
-Run the application
-```
-dotnet run
-```
-The application will start on http://localhost:7096.
+The application will start on http://localhost:8000.
 
 <a id="api-docs"></a>
 ## 3. API Documentation
@@ -173,7 +161,7 @@ https://localhost:7096/swagger/index.html
 <img src="./readme/images/MindSpace-ParentScreenflow.png" alt="MindSpace-ParentScreenflow" />
 
 ### 7.3. Psychologist Screen Flow:
-<img src="./readme/images/MindSpace-PsychologistScreenFlow.png" alt="MindSpace-PsychologistScreenflow" />
+<img src="./readme/images/MindSpace-PsychologistScreenflow.png" alt="MindSpace-PsychologistScreenflow" />
 
 ### 7.4. School Manager Screen Flow:
 <img src="./readme/images/MindSpace-SchoolManagerScreenflow.png" alt="MindSpace-SchoolManagerScreenflow" />
