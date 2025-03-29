@@ -39,14 +39,16 @@ export default function ListLayout({ data, tableColumns, tableCenterColumns, tot
                     searchBoxProps={searchBoxProps}
                 />
 
-                <Button
-                    className='bg-black text-white'
-                    variant="shadow"
-                    endContent={<PlusIcon />}
-                    onPress={() => router.push(createHref)}
-                >
-                    Tạo mới
-                </Button>
+                {createHref && (
+                    <Button
+                        className='bg-black text-white'
+                        variant="shadow"
+                        endContent={<PlusIcon />}
+                        onPress={() => router.push(createHref)}
+                    >
+                        Tạo mới
+                    </Button>
+                )}
 
             </div>
 

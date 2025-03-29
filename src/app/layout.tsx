@@ -5,7 +5,8 @@ import "./globals.css";
 import Providers from "@/components/provider/Providers";
 import SideBar from "@/components/SideBar";
 import Header from "@/components/Header";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 
 // export const metadata: Metadata = {
@@ -18,9 +19,17 @@ export default function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const pathname = usePathname()
+    const pathname = usePathname();
+    const router = useRouter();
+    const isLogginPage = pathname === '/login';
 
-    const isLogginPage = pathname === '/login'
+    // Using router to redirect, DONT use redirect since it's from the server side
+    useEffect(() => {
+        const isLoggedIn = localStorage.getItem('userInfo');
+        if (!isLogginPage && !isLoggedIn) {
+            router.push('/login');
+        }
+    }, [pathname, isLogginPage, router]);
 
     return (
         <html lang="en">
