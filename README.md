@@ -173,7 +173,7 @@ https://localhost:7096/swagger/index.html
 <img src="./readme/images/MindSpace-ParentScreenflow.png" alt="MindSpace-ParentScreenflow" />
 
 ### 7.3. Psychologist Screen Flow:
-<img src="./readme/images/MindSpace-PsychologistScreenflow.png" alt="MindSpace-PsychologistScreenflow" />
+<img src="./readme/images/MindSpace-PsychologistScreenFlow.png" alt="MindSpace-PsychologistScreenflow" />
 
 ### 7.4. School Manager Screen Flow:
 <img src="./readme/images/MindSpace-SchoolManagerScreenflow.png" alt="MindSpace-SchoolManagerScreenflow" />
