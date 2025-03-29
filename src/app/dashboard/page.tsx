@@ -4,7 +4,7 @@ import AdminDashboard from '@/features/dashboard/admin/AdminDashboard';
 import SchoolManagerDashboard from '@/features/dashboard/school-manager/SchoolManagerDashboard';
 
 
-export default function ManageTimeslots() {
+export default function ManageDashboard() {
     const currentUser = localStorage.getItem('userInfo');
     if (currentUser) {
         const userInfo = JSON.parse(currentUser);
